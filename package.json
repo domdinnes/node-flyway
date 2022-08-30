@@ -1,7 +1,7 @@
 {
   "name": "node-flyway",
   "version": "0.0.1",
-  "description": "A library for interacting with FlywayDB from within a Node.js application.",
+  "description": "Execute Flyway commands from within a Node.js application.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
