@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "target": "es2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "declaration": true,
+    "importHelpers": true,
+    "lib": [ "es2017", "dom" ],
+    "types": ["node"]
+  }
+}
