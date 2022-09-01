@@ -2,19 +2,21 @@
 # Node Flyway
 
 <div align="center">
-<img src="assets/logo.svg" style="height: 250px; margin: 0 auto" alt="node-flyway logo" >
+<img src="https://user-images.githubusercontent.com/10658609/187962409-234d4675-b2a3-4385-95e2-a00d7dec9384.svg" style="height: 250px; margin: 0 auto" alt="node-flyway logo" >
 </div>
 
-Execute Flyway commands from within a Node.js application. 
+Apply version control to databases from within a Node.js application. 
 
-Provides an easy and intuitive Node.js API for Flyway including all Flyway commands: `migrate`, `clean`, `info`, `validate`, `baseline` & `repair`.
+Uses [Flyway](https://flywaydb.org/) for database version control, schema evolution and migrations.
+
+Provides an easy and intuitive Node.js API including all Flyway commands: `migrate`, `clean`, `info`, `validate`, `baseline` & `repair`.
 
 Can also be used as a command line utility to manage, interact with and install a Flyway CLI.
 
 
 
 ## Table of contents
-
+- [Database version control explained](#database-version-control-explained)
 - [Common Use Cases](#common-use-cases)
 - [Install](#install)
 - [Getting started](#getting-started)
@@ -28,21 +30,62 @@ Can also be used as a command line utility to manage, interact with and install 
   - [install](#api-install)
 - [Error handling](#error-handling)
 - [Configuration options](#configuration-options)
+  - [Flyway configuration options](#flyway-configuration-options)
+  - [Flyway configuration options (advanced)](#flyway-advanced-configuration)
+  - [Execution options](#execution-options)
 - [Using older versions of Flyway](#using-older-versions-of-Flyway)
 - [Using node-flyway as a command-line tool](#using-node-flyway-as-a-command-line-tool)
 
 <br>
 <br>
 
+## Database version control explained
+
+### Why do databases require version control?
+
+Within a code-base, the database will exist in several different places:
+- Local developer machines
+- Continuous integration pipelines
+- Production/Demo/Test environments
+- Ephemeral databases created for automated tests
+
+
+While application data will differ between different environments (obviously customer data won't live on a developer's local machine), the data structure (tables/indexes/views) and the reference data should be identical across all database instances. Ongoing changes to the database structure also need to be applied across all database instances and environments in a way which is consistent, reproducible and deterministic.
+
+
+
+### What are migrations?
+Database versioning via `migrations` allows changes to the database structure to be managed in a simple way that's applied consistently across all database instances.
+
+Migrations are simple SQL files with a version number which are applied sequentially to the database to modify its structure. 
+A migration tool like `Flyway` will track which migrations have already been applied, and ensure that each migration is only applied once.
+
+When we want to make a structural change to a database, new migrations can be created and added to the migration directory within the code-base. 
+The migrations - along with the rest of the code are distributed across to the different environments.
+The Flyway `migrate` command is executed (either on application start-up or at some other point) which loads all the migrations from the migration directory and applies any new ones against the database.
+This process is completely deterministic, reproducible and independent of the environment in which it runs.
+This allows the structure of the database to be identical across all environments.
+
+
+
+More information about Flyway and database migrations can be found [here](https://flywaydb.org/documentation/getstarted/why).
+
+
+
+<br>
+<br>
+
+
 ## Common use cases
 
-* To allow Node.js applications to execute Flyway commands against a database. Provides an easy-to-use and intuitive API.
+* To allow Node.js applications to evolve schema and perform database migrations via Flyway. Provides an easy-to-use and intuitive API.
 * To manage a single/multiple Flyway installations on a machine. Without having to configure the system path or manually download a Flyway CLI.
 * To be used as part of a CI/CD pipeline to execute Flyway commands or as part of a build script.
 * For use cases such as running an in-memory/containerized database for testing, where it's necessary to apply Flyway migrations against the database programmatically when the tests execute.
 
 <br>
 <br>
+
 
 ## Install
 
@@ -56,12 +99,11 @@ npm install node-flyway
 ## Getting started
 
 - The `node-flyway` package exports a single class named `Flyway`.
-- The `Flyway` constructor accepts up to three arguments.
-  - An object containing configuration properties for Flyway. The configuration properties are defined [here](#configuration-options).
-  - An object containing options related to the behaviour of `node-flyway`. These options are defined [here](#configuration-options).
-  - A debug flag specifying whether debug logging is enabled. By default this is `false`.
-- The `Flyway` instance provides a method for each Flyway command.
+- The `Flyway` class provides instance methods for each Flyway command.
   - Each method returns a promise with the outcome of the command and additional information.
+- To construct an instance the `Flyway` constructor accepts two arguments:
+  - `config: FlywayConfig` - An object containing configuration properties for Flyway. This is where the database url, the database user/password & the migration locations are specified. More detail about the configuration properties can be found [here](#configuration-options).
+  - `executionOptions?: ExecutionOptions` - An object containing options related to the behaviour of `node-flyway`. These options are defined [here](#configuration-options).
 
 Here is some example code showing how to run the Flyway `migrate` command:
 ```ts
