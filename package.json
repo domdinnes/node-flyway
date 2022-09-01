@@ -1,6 +1,6 @@
 {
   "name": "node-flyway",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Apply version control to databases from within a Node.js application.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
