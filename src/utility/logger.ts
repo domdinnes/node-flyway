@@ -11,3 +11,7 @@ export const getLogger = (loggerName: string): Logger => {
         log:  debug(`node-flyway:${loggerName}`)
     };
 }
+
+export const enableLogging = () => {
+    debug.enable("node-flyway:*");
+}
