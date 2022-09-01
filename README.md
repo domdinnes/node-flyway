@@ -1,10 +1,12 @@
 
 # Node Flyway
-
+<br>
+<br>
 <div align="center">
-<img src="https://user-images.githubusercontent.com/10658609/187962409-234d4675-b2a3-4385-95e2-a00d7dec9384.svg" style="height: 250px; margin: 0 auto" alt="node-flyway logo" >
+<img src="https://user-images.githubusercontent.com/10658609/187976342-0a8cd5e8-996b-400d-933c-62aa9b621762.svg" style="margin: 0 auto" alt="node-flyway logo" >
 </div>
-
+<br>
+<br>
 Apply version control to databases from within a Node.js application. 
 
 Uses [Flyway](https://flywaydb.org/) for database version control, schema evolution and migrations.
