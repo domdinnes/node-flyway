@@ -1,7 +1,7 @@
 {
   "name": "node-flyway",
-  "version": "0.0.1",
-  "description": "Execute Flyway commands from within a Node.js application.",
+  "version": "0.0.2",
+  "description": "Apply version control to databases from within a Node.js application.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -13,6 +13,7 @@
   "author": "Dom Dinnes",
   "license": "ISC",
   "files": ["dist"],
+  "repository": "https://github.com/domdinnes/node-flyway",
   "dependencies": {
     "auto-bind": "4.0.0",
     "debug": "^4.3.4",
