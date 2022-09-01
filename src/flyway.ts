@@ -1,7 +1,6 @@
-
-import { DEFAULT_FLYWAY_VERSION } from "./internal/defaults";
-import { FlywayInternal } from "./internal/flyway-internal";
-import { FlywayVersion } from "./internal/flyway-version";
+import {DEFAULT_FLYWAY_CLI_DIRECTORY, DEFAULT_FLYWAY_VERSION} from "./internal/defaults";
+import {FlywayInternal} from "./internal/flyway-internal";
+import {FlywayVersion} from "./internal/flyway-version";
 import {
     FlywayBaselineResponse,
     FlywayCleanResponse,
@@ -11,63 +10,86 @@ import {
     FlywayValidateResponse,
     NodeFlywayResponse
 } from "./response/responses";
-import {ExecutionOptions, FlywayConfig, FlywayOptionalConfig} from "./types/types";
+import {ExecutionOptions, FlywayAdvancedConfig, FlywayConfig, FlywayOptionalConfig} from "./types/types";
 import * as autoBind from "auto-bind";
+import {enableLogging} from "./utility/logger";
 
 export class Flyway {
 
-    private internal: FlywayInternal;
-
-    private version: FlywayVersion = DEFAULT_FLYWAY_VERSION;
+    private static defaultVersion: FlywayVersion = DEFAULT_FLYWAY_VERSION;
 
     constructor(
-        config: FlywayConfig,
-        executionOptions?: ExecutionOptions,
-        debug?: boolean
+        private config: FlywayConfig,
+        private executionOptions?: ExecutionOptions,
+        private debug?: boolean
     ) {
-        this.internal = new FlywayInternal(config, this.version, executionOptions, debug);
+        if (debug) {
+            enableLogging();
+        }
         autoBind(this);
     }
 
     public migrate(config?: FlywayOptionalConfig) : Promise<NodeFlywayResponse<FlywayMigrateResponse>> { // Tidy up return value.
-        return this.internal.migrate(config);
+        const mergedConfig = this.mergeConfig(config);
+        return FlywayInternal.migrate(mergedConfig, Flyway.defaultVersion, this.executionOptions);
     }
 
     public clean(config?: FlywayOptionalConfig): Promise<NodeFlywayResponse<FlywayCleanResponse>> {
-        return this.internal.clean(config);
+        const mergedConfig = this.mergeConfig(config);
+        return FlywayInternal.clean(mergedConfig, Flyway.defaultVersion, this.executionOptions);
     }
 
     public info(config?: FlywayOptionalConfig): Promise<NodeFlywayResponse<FlywayInfoResponse>> {
-        return this.internal.info(config);
+        const mergedConfig = this.mergeConfig(config);
+        return FlywayInternal.info(mergedConfig, Flyway.defaultVersion, this.executionOptions);
     }
 
     public validate(config?: FlywayOptionalConfig): Promise<NodeFlywayResponse<FlywayValidateResponse>> {
-        return this.internal.validate(config);
+        const mergedConfig = this.mergeConfig(config);
+        return FlywayInternal.validate(mergedConfig, Flyway.defaultVersion, this.executionOptions);
     }
 
     public baseline(config?: FlywayOptionalConfig): Promise<NodeFlywayResponse<FlywayBaselineResponse>> {
-        return this.internal.baseline(config);
+        const mergedConfig = this.mergeConfig(config);
+        return FlywayInternal.baseline(mergedConfig, Flyway.defaultVersion, this.executionOptions);
     }
 
     public repair(config?: FlywayOptionalConfig): Promise<NodeFlywayResponse<FlywayRepairResponse>> {
-        return this.internal.repair(config);
+        const mergedConfig = this.mergeConfig(config);
+        return FlywayInternal.repair(mergedConfig, Flyway.defaultVersion, this.executionOptions);
     }
 
-    public install(location?: string, version?: FlywayVersion): Promise<NodeFlywayResponse<any>["additionalDetails"]> {
-        return this.internal.install(location, version);
-    }
+    public static install(location?: string, version?: FlywayVersion, debug?: boolean): Promise<NodeFlywayResponse<any>["additionalDetails"]> {
 
-    public static version(
-        version: FlywayVersion,
-        config: FlywayConfig,
-        executionOptions?: ExecutionOptions,
-        debug?: boolean
-    ){
-        return new FlywayInternal(
-            config,
-            version,
-            executionOptions,
-            debug
+        if (debug) {
+            enableLogging();
+        }
+
+        return FlywayInternal.install(
+            location || DEFAULT_FLYWAY_CLI_DIRECTORY,
+            version || Flyway.defaultVersion
         );
+    }
+
+
+
+    private mergeConfig(partialConfig?: Partial<FlywayConfig>): FlywayConfig {
+
+        if(!partialConfig) {
+            return this.config;
+        }
+
+        const mergedAdvancedConfig: FlywayAdvancedConfig | undefined = !!partialConfig.advanced && !!this.config.advanced
+            ? {
+                ...this.config.advanced,
+                ...partialConfig.advanced
+            }
+            : this.config.advanced || partialConfig.advanced;
+
+        return {
+            ...this.config,
+            ...partialConfig,
+            advanced: mergedAdvancedConfig
+        }
     }
 }

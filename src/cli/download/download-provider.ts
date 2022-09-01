@@ -3,8 +3,10 @@ import {mkdir, rm, stat} from "fs/promises";
 import {FlywayVersion} from "../../internal/flyway-version";
 import {hasFullPermissionsOnFile} from "../../utility/utility";
 import {FlywayCliProvider} from "../flyway-cli-provider";
-// @ts-ignore - fix the missing typings for decompressTargz. Probably will use a different library.
+// @ts-ignore - fix missing types
 import * as decompressTargz from "decompress-targz";
+// @ts-ignore - fix missing types
+import * as decompressUnzip from "decompress-unzip";
 import {resolve} from "path";
 import {FlywayCliSource} from "../../types/types";
 import {getLogger} from "../../utility/logger";
@@ -49,7 +51,7 @@ export class DownloadProvider extends FlywayCliProvider {
             throw new Error("Specified path isn't directory");
         }
 
-        if(!hasFullPermissionsOnFile(this.saveDirectory)) {
+        if(!await hasFullPermissionsOnFile(this.saveDirectory)) {
             throw new Error();
         }
 
@@ -64,23 +66,7 @@ export class DownloadProvider extends FlywayCliProvider {
 
         DownloadProvider.logger.log(`Successfully downloaded Flyway CLI ${FlywayVersion[flywayVersion]} to location: ${this.saveDirectory}`)
 
-        const decompressedFiles = await decompress(
-            archiveLocation, 
-            saveDirectoryAbsolutePath, 
-            {plugins: [decompressTargz()], filter: file => file.type === "file"}
-        );
-
-        /*
-            [Error: ENOENT: no such file or directory, symlink 'ja_JP.UTF-8' -> '.../code/node-flyway/cli/flyway-8.5.11/jre/man/ja/'] {
-            errno: -2,
-            code: 'ENOENT',
-            syscall: 'symlink',
-            path: 'ja_JP.UTF-8',
-            dest: '.../code/node-flyway/cli/flyway-8.5.11/jre/man/ja/'
-}
-            Referenced here: https://github.com/kevva/decompress/issues/93
-            Not an issue, only impacts 'man'. The symlinks can be excluded using a filter.
-        */
+        const decompressedFiles = await this.decompressFiles(archiveLocation, saveDirectoryAbsolutePath);
         
         const extractedDirectory = this.getExtractLocationFromDecompressedFiles(decompressedFiles, this.saveDirectory);
 
@@ -116,5 +102,30 @@ export class DownloadProvider extends FlywayCliProvider {
         return path.join(outerDirectory, files[0].path.split(path.sep)[0]);
     }
 
+    private async decompressFiles(
+        archiveLocation: string,
+        saveDirectory: string
+    ) {
+
+        const plugins = archiveLocation.includes(".zip") ? [decompressUnzip()] : [decompressTargz()];
+
+        return decompress(
+            archiveLocation,
+            saveDirectory,
+            {plugins, filter: file => file.type === "file"}
+        );
+
+        /*
+            [Error: ENOENT: no such file or directory, symlink 'ja_JP.UTF-8' -> '.../code/node-flyway/cli/flyway-8.5.11/jre/man/ja/'] {
+            errno: -2,
+            code: 'ENOENT',
+            syscall: 'symlink',
+            path: 'ja_JP.UTF-8',
+            dest: '.../code/node-flyway/cli/flyway-8.5.11/jre/man/ja/'
+            }
+            Referenced here: https://github.com/kevva/decompress/issues/93
+            Not an issue, only impacts 'man'. The symlinks can be excluded using a filter.
+        */
+    }
 }
 
