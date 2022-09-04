@@ -1,5 +1,1 @@
-CREATE TABLE application_user (
-    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    email TEXT NOT NULL UNIQUE,
-    name TEXT NOT NULL
-);
+INSERT INTO application_user (email, name) VALUES ('test_1@test.com', 'Matt Jones');

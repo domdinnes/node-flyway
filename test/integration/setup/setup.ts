@@ -11,7 +11,7 @@ export const createCleanDatabase = async () => {
     const databaseLivenessCheckResult = await pollDatabaseForLiveness(pollCount, 300);
 
     if (databaseLivenessCheckResult.success) {
-        logger.log(`Database is live and ready to receive connections. Liveness check completed after ${databaseLivenessCheckResult.attempts} attemps.`)
+        logger.log(`Database is live and ready to receive connections. Liveness check completed after ${databaseLivenessCheckResult.attempts} attempts.`)
     }
     else {
         throw Error(`Database not ready after polling ${pollCount} times.`);
