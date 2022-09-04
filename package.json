@@ -7,15 +7,9 @@
   "scripts": {
     "build": "tsc",
     "test": "npm run test:unit",
-    "test:unit": "mocha --recursive --extension .test.ts -r ts-node/register test",
-    "test:integration": "echo \"Error: integration tests not yet available.\" && exit 1"
+    "test:unit": "mocha --recursive --extension .test.ts -r ts-node/register test/unit",
+    "test:integration": "mocha --recursive --extension .test.ts --timeout 5000 -r ts-node/register test/integration"
   },
-  "author": "Dom Dinnes",
-  "license": "ISC",
-  "files": [
-    "dist"
-  ],
-  "repository": "https://github.com/domdinnes/node-flyway",
   "dependencies": {
     "auto-bind": "4.0.0",
     "debug": "^4.3.4",
@@ -44,5 +38,18 @@
     "source-map-support": "^0.5.21",
     "ts-node": "^10.8.2",
     "typescript": "^4.7.4"
-  }
+  },
+  "author": "Dom Dinnes",
+  "license": "ISC",
+  "files": [
+    "dist"
+  ],
+  "repository": "https://github.com/domdinnes/node-flyway",
+  "keywords": [
+    "flyway",
+    "flywaydb",
+    "migrations",
+    "version-control",
+    "database migrations"
+  ]
 }

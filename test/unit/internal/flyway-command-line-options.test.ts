@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {describe, it} from 'mocha';
-import {FlywayConfig} from '../../src/types/types';
-import {FlywayCommandLineOptions} from "../../src/internal/flyway-command-line-options";
+import {FlywayConfig} from '../../../src/types/types';
+import {FlywayCommandLineOptions} from "../../../src/internal/flyway-command-line-options";
 
 describe("CommandLineOptionGenerator", () => {
 

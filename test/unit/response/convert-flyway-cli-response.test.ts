@@ -1,5 +1,5 @@
 import {describe, it} from 'mocha';
-import {ConvertJsonToResponse} from "../../src/response/json-to-response";
+import {ConvertJsonToResponse} from "../../../src/response/json-to-response";
 import {expect} from "chai";
 
 describe("ConvertFlywayCliResponse", () => {

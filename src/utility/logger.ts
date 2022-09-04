@@ -5,13 +5,21 @@ export type Logger = {
   log: debug.Debugger  
 };
 
+export type LoggerType = "default" | "integration-test";
 
-export const getLogger = (loggerName: string): Logger => {
+
+export const getLogger = (loggerName: string, loggerType?: LoggerType): Logger => {
+
+    const namespace = loggerType == undefined || loggerType == "default" ? "node-flyway" : loggerType;
+
     return {
-        log:  debug(`node-flyway:${loggerName}`)
+        log:  debug(`${namespace}:${loggerName}`)
     };
 }
 
-export const enableLogging = () => {
-    debug.enable("node-flyway:*");
+export const enableLogging = (loggerType?: LoggerType) => {
+    const namespace = loggerType == undefined || loggerType == "default" ? "node-flyway" : loggerType;
+
+    debug.enable(`${namespace}:*`);
 }
+

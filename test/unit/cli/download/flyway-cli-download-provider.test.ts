@@ -3,8 +3,8 @@ import { stat } from "fs/promises";
 import { describe } from "mocha";
 import { join } from "path";
 import * as _temp from "temp";
-import { DownloadProvider } from "../../../src/cli/download/download-provider";
-import { FlywayVersion } from "../../../src";
+import { DownloadProvider } from "../../../../src/cli/download/download-provider";
+import { FlywayVersion } from "../../../../src";
 import { MockFlywayCliDownloader } from "../../utility/mock-flyway-cli-downloader";
 
 describe("FlywayCliDownloadProvider", () => {

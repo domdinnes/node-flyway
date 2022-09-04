@@ -1,6 +1,6 @@
 import {describe} from "mocha";
-import {FlywayCliUrlBuilder} from "../../../dist/cli/download/downloader/flyway-cli-downloader";
-import {FlywayVersion} from "../../../dist";
+import {FlywayCliUrlBuilder} from "../../../../dist/cli/download/downloader/flyway-cli-downloader";
+import {FlywayVersion} from "../../../../dist";
 import { expect } from "chai";
 
 describe("FlywayCliDownloader", () => {
