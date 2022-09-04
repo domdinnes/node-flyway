@@ -1,9 +1,9 @@
 import { describe, it } from 'mocha';
-import { FlywayCliProvider } from '../../src/cli/flyway-cli-provider';
+import { FlywayCliProvider } from '../../../src/cli/flyway-cli-provider';
 import { expect } from "chai";
-import { FlywayVersion } from '../../src';
-import { FlywayCli, FlywayExecutable } from '../../src/cli/flyway-cli';
-import { FlywayCliSource } from '../../src/types/types';
+import { FlywayVersion } from '../../../src';
+import { FlywayCli, FlywayExecutable } from '../../../src/cli/flyway-cli';
+import { FlywayCliSource } from '../../../src/types/types';
 
 describe("FlywayCliProvider", () => {
 

@@ -1,0 +1,1 @@
+INSERT INTO application_user (email, name) VALUES ('test@test.com', 'Dom Dinnes');

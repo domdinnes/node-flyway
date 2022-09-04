@@ -1,0 +1,4 @@
+CREATE TABLE random.some_table (
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    name TEXT NOT NULL
+);

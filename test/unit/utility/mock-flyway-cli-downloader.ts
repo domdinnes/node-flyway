@@ -1,7 +1,7 @@
 import { copyFile } from "fs/promises";
 import { join } from "path";
-import { FlywayCliDownloader } from "../../src/cli/download/downloader/flyway-cli-downloader";
-import { FlywayVersion } from "../../src/internal/flyway-version";
+import { FlywayCliDownloader } from "../../../src/cli/download/downloader/flyway-cli-downloader";
+import { FlywayVersion } from "../../../src/internal/flyway-version";
 
 export class MockFlywayCliDownloader implements FlywayCliDownloader {
         
@@ -17,7 +17,7 @@ export class MockFlywayCliDownloader implements FlywayCliDownloader {
         if(flywayVersion != FlywayVersion["V8.5.0"]) {
             throw new Error();
         }
-        const path = "./test/resources";
+        const path = "./test/unit/resources";
         const destinationPath = join(saveDirectory, this.compressedFilename);
         await copyFile(join(path, this.compressedFilename), destinationPath);
         return destinationPath;
