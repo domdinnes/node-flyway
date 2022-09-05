@@ -107,13 +107,13 @@ class CommandLineOptionGenerator {
 
         return configKeys
             .filter(
-                configKey => !!flatConfig[configKey]
+                configKey => flatConfig[configKey] != undefined
             )
             .map(
                 configKey => this.build(
                     flatConfig,
                     configKey,
-                    optionMap
+                    commandLineOptionMap
                 )
             )
             .filter(this.isDefined);
@@ -154,7 +154,7 @@ class CommandLineOptionGenerator {
     private static build<T extends FlywayBasicConfig | FlywayAdvancedConfig>(
         config: T,
         configKey: keyof T,
-        optionMap: { [Property in (keyof T)]: string }
+        commandLineOptionMappings: { [Property in (keyof T)]: string }
     ): FlywayCommandLineOption | undefined {
         const configPropertyValue = config[configKey];
 
@@ -164,17 +164,17 @@ class CommandLineOptionGenerator {
 
         if (Array.isArray(configPropertyValue)) {
             return new FlywayCommandLineArrayOption(
-                optionMap[configKey],
+                commandLineOptionMappings[configKey],
                 configPropertyValue
             );
         } else if (isMap(configPropertyValue)) {
             return new FlywayCommandLineMapOption(
-                optionMap[configKey],
+                commandLineOptionMappings[configKey],
                 configPropertyValue as any // TODO - fix explicit any
             );
         } else {
             return new FlywayCommandLineStandardOption(
-                optionMap[configKey],
+                commandLineOptionMappings[configKey],
                 `${configPropertyValue}`
             );
         }
@@ -187,7 +187,7 @@ class CommandLineOptionGenerator {
 
 }
 
-const optionMap: CommandLineOptionMap = {
+const commandLineOptionMap: CommandLineOptionMap = {
     url: "url",
     user: "user",
     password: "password",

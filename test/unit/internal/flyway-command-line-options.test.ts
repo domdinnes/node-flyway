@@ -93,4 +93,37 @@ describe("CommandLineOptionGenerator", () => {
     });
 
 
+    it("can generate command line option with cleanDisabled", () => {
+        const config: FlywayConfig = {
+            "url": "jdbc:postgresql://localhost:2575/postgres",
+            "user": "postgres",
+            "password": "password123",
+            "defaultSchema": "public",
+            "migrationLocations": [
+                "test/integration/migrations/1_basic_migrations"
+            ],
+            "advanced": {
+                "cleanDisabled": false
+            }
+        };
+
+        const result = FlywayCommandLineOptions.build(config);
+
+        expect(result.getCommandLineOptions()).to.contains.members(
+            [
+                '-url=jdbc:postgresql://localhost:2575/postgres',
+                '-user=postgres',
+                '-password=password123',
+                '-defaultSchema=public',
+                '-locations="test/integration/migrations/1_basic_migrations"',
+                '-cleanDisabled=false'
+            ]
+        );
+
+        expect(result.getCommandLineOptions()).to.have.length(6);
+    });
+
+
+
+
 })
