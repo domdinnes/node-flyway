@@ -57,6 +57,14 @@ export class DownloadProvider extends FlywayCliProvider {
 
         DownloadProvider.logger.log(`Downloading Flyway CLI ${FlywayVersion[flywayVersion]}...`)
 
+        /*
+            Partially completed/duplicate downloads which haven't been cleaned up will cause an error to occur.
+            This will happen when one or more download attempts are interrupted, leaving incomplete files in the download directory.
+            The first download attempt will leave a file with name `flyway-cli-9.0.0.tar.gz`, the second `flyway-cli-9.0.0.tar.gz (1)` and so on.
+            When the next complete download happens, the process will fail at the extract stage as the extraction url will reference an incorrect url.
+            The url of the completed download will be: `flyway-cli-9.0.0.tar.gz (2)` whereas the extraction url will reference flyway-cli-9.0.0.tar.gz which refers to the first incomplete download.
+            This is a bug and requires a fix.
+        */
         const archiveLocation = await this.flywayCliDownloader.downloadFlywayCli(
             flywayVersion,
             this.saveDirectory

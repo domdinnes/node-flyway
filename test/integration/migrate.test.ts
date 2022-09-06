@@ -5,7 +5,8 @@ import {expect} from "chai";
 import {
     basicMigrations,
     failingMigrations,
-    missingMigrations, multipleSchemaMigrations,
+    missingMigrations,
+    multipleSchemaMigrations,
     outOfOrderMigrations,
     testConfiguration
 } from "./utility/utility";
@@ -31,6 +32,23 @@ describe("migrate()", () => {
 
         //logger.log(inspectResponse(response));
 
+        expect(response.success).to.be.true;
+    });
+
+    it('can perform a basic migrate after installing a CLI', async () => {
+
+        const flyway = new Flyway(
+            {
+                ...testConfiguration,
+                migrationLocations: [basicMigrations]
+            },
+            {
+                flywayCliStrategy: FlywayCliStrategy.DOWNLOAD_CLI_ONLY
+            }
+        );
+
+        const response = await flyway.migrate();
+        
         expect(response.success).to.be.true;
     });
 
