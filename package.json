@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "npm run test:unit",
+    "test": "npm run test:unit && npm run test:integration",
     "test:unit": "mocha --recursive --extension .test.ts -r ts-node/register test/unit",
     "test:integration": "mocha --recursive --extension .test.ts --timeout 600000 -r ts-node/register test/integration"
   },
