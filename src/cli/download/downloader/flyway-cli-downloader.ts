@@ -1,6 +1,7 @@
-import download = require("download");
 import { join } from "path";
 import { FlywayVersion, getUrlComponentsForFlywayVersion } from "../../../internal/flyway-version";
+import {DownloaderHelper} from "node-downloader-helper";
+import {getLogger, Logger} from "../../../utility/logger";
 
 /*
     Takes a flyway version and a save directory.
@@ -19,14 +20,33 @@ export interface FlywayCliDownloader {
 
 export class DirectFlywayCliDownloader implements FlywayCliDownloader {
 
+    private logger: Logger = getLogger("DirectFlywayCliDownloader");
+
+
     public async downloadFlywayCli(
         flywayVersion: FlywayVersion,
         saveDirectory: string
     ): Promise<string> {
         const operatingSystem = FlywayCliUrlBuilder.getUrlRepresentationOfHostOperatingSystem();
         const url = FlywayCliUrlBuilder.buildUrl(flywayVersion, operatingSystem);
-        await download(url.url, saveDirectory, {});
+        await this.download(url.url, saveDirectory);
         return join(saveDirectory, url.fileName);
+    }
+
+    private async download(url: string, saveDirectory: string): Promise<void> {
+        const downloader = new DownloaderHelper(url, saveDirectory);
+        return new Promise(
+            (resolve, reject) => {
+                downloader.on("end", () =>resolve());
+                downloader.on("error", (err) => reject(err));
+                downloader.on("progress.throttled", (downloadEvents) => {
+                    const percentageComplete = downloadEvents.progress < 100 ? downloadEvents.progress.toPrecision(2) : 100;
+                    this.logger.log(`Downloaded: ${percentageComplete}%`)
+                });
+                downloader.start();
+            }
+        );
+
     }
 
 }

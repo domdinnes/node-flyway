@@ -24,7 +24,9 @@ describe("migrate()", () => {
             {
                 ...testConfiguration,
                 migrationLocations: [basicMigrations]
-            }
+            },
+            undefined,
+            true
         );
 
         const response = await flyway.migrate();
