@@ -8,7 +8,8 @@
     "build": "tsc",
     "test": "npm run test:unit",
     "test:unit": "mocha --recursive --extension .test.ts -r ts-node/register test/unit",
-    "test:integration": "mocha --recursive --extension .test.ts --timeout 600000 -r ts-node/register test/integration"
+    "test:integration": "mocha --recursive --extension .test.ts --timeout 600000 -r ts-node/register test/integration -r test/integration/setup/local.ts",
+    "test:integration-pipeline": "mocha --recursive --extension .test.ts --timeout 600000 -r ts-node/register test/integration -r test/integration/setup/pipeline.ts"
   },
   "dependencies": {
     "auto-bind": "4.0.0",

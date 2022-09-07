@@ -1,6 +1,6 @@
 import {describe, it} from 'mocha';
-import {createCleanDatabase} from "./setup/setup";
-import {Flyway, FlywayCliStrategy} from "../../dist";
+import {cleanDatabase} from "./setup/setup";
+import {Flyway, FlywayCliStrategy} from "../../src";
 import {expect} from "chai";
 import {
     basicMigrations,
@@ -15,7 +15,7 @@ import {
 describe("migrate()", () => {
 
     beforeEach(() => {
-        return createCleanDatabase();
+        return cleanDatabase();
     });
 
 
@@ -32,23 +32,6 @@ describe("migrate()", () => {
 
         //logger.log(inspectResponse(response));
 
-        expect(response.success).to.be.true;
-    });
-
-    it('can perform a basic migrate after installing a CLI', async () => {
-
-        const flyway = new Flyway(
-            {
-                ...testConfiguration,
-                migrationLocations: [basicMigrations]
-            },
-            {
-                flywayCliStrategy: FlywayCliStrategy.DOWNLOAD_CLI_ONLY
-            }
-        );
-
-        const response = await flyway.migrate();
-        
         expect(response.success).to.be.true;
     });
 
@@ -81,7 +64,7 @@ describe("migrate()", () => {
                 migrationLocations: [basicMigrations],
                 advanced: {
                     createSchemas: true,
-                    initSql: "CREATE TABLE public.some_table (id INTEGER PRIMARY KEY, some_column TEXT NOT NULL);"
+                    // initSql: "CREATE TABLE public.some_table (id INTEGER PRIMARY KEY, some_column TEXT NOT NULL);"
                 }
             }
         );
@@ -97,7 +80,7 @@ describe("migrate()", () => {
         const flyway = new Flyway(
             {
                 ...testConfiguration,
-                migrationLocations: [`${outOfOrderMigrations}/part_1`]
+                migrationLocations: [`${outOfOrderMigrations}/part_1`],
             }
         );
 
@@ -139,8 +122,8 @@ describe("migrate()", () => {
 
         const flyway = new Flyway(
             {
-                url: "jdbc:postgresql://localhost:2575/postgres",
-                user: "postgres",
+                url: testConfiguration.url,
+                user: testConfiguration.user,
                 migrationLocations: [basicMigrations],
                 advanced: {
                     configFileEncoding: "UTF-8",

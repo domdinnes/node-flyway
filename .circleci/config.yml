@@ -1,0 +1,31 @@
+version: 2.1
+
+jobs:
+
+  unit-test:
+    docker:
+      - image: cimg/node:18.8.0
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm run test:unit
+
+  integration-test:
+    docker:
+      - image: cimg/node:18.8.0
+
+      - image: cimg/postgres:14.0
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password-123
+
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm run test:integration-pipeline
+
+workflows:
+  test-workflow:
+    jobs:
+      - unit-test
+      - integration-test

@@ -29,7 +29,9 @@ export class Flyway {
         autoBind(this);
     }
 
-    public migrate(config?: FlywayOptionalConfig) : Promise<NodeFlywayResponse<FlywayMigrateResponse>> { // Tidy up return value.
+    // Tidy up return value
+    // Some commands - migrate/info/validate/repair require at least one migration location
+    public migrate(config?: FlywayOptionalConfig) : Promise<NodeFlywayResponse<FlywayMigrateResponse>> {
         const mergedConfig = this.mergeConfig(config);
         return FlywayInternal.migrate(mergedConfig, Flyway.defaultVersion, this.executionOptions);
     }

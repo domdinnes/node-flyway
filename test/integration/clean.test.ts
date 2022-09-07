@@ -1,20 +1,14 @@
 import {describe, it} from 'mocha';
-import {createCleanDatabase} from "./setup/setup";
-import {Flyway, FlywayCliStrategy} from "../../dist";
+import {cleanDatabase} from "./setup/setup";
+import {Flyway} from "../../src";
 import {expect} from "chai";
-import {
-    basicMigrations,
-    failingMigrations,
-    missingMigrations, multipleSchemaMigrations,
-    outOfOrderMigrations,
-    testConfiguration
-} from "./utility/utility";
+import {basicMigrations, testConfiguration} from "./utility/utility";
 
 
 describe("clean()", () => {
 
     beforeEach(() => {
-        return createCleanDatabase();
+        return cleanDatabase();
     });
 
 
