@@ -1,17 +1,17 @@
 import {exec as execute} from "shelljs";
-import {enableLogging, getLogger} from "../../../dist/utility/logger";
+import {getLogger} from "../../../src/utility/logger";
+import {Flyway} from "../../../src";
+import {testConfiguration} from "../utility/utility";
 
-const logger = getLogger("DatabaseSetup", "integration-test");
+export const logger = getLogger("DatabaseSetup", "integration-test");
 
 
-export const createCleanDatabase = async () => {
-    enableLogging("integration-test");
-    await createContainerizedPostgres();
+export const performDatabaseLivenessCheck = async (password: string, port: number) => {
     const pollCount = 10;
-    const databaseLivenessCheckResult = await pollDatabaseForLiveness(pollCount, 300);
+    const databaseLivenessCheckResult = await pollDatabaseForLiveness(password, port, pollCount, 300);
 
     if (databaseLivenessCheckResult.success) {
-        logger.log(`Database is live and ready to receive connections. Liveness check completed after ${databaseLivenessCheckResult.attempts} attempts.`)
+        logger.log(`Database is live and ready to receive connections on port: ${port}. Liveness check completed after ${databaseLivenessCheckResult.attempts} attempts.`)
     }
     else {
         throw Error(`Database not ready after polling ${pollCount} times.`);
@@ -19,16 +19,40 @@ export const createCleanDatabase = async () => {
 }
 
 
+export const cleanDatabase = async () => {
+    const flyway = new Flyway(
+        {
+            ...testConfiguration,
+            migrationLocations: [],
+            advanced: {
+                cleanDisabled: false,
+                schemas: ["public", "random"]
+            }
+        },
+    );
 
-export const createContainerizedPostgres = async () => {
+    await flyway.clean();
+}
+
+
+
+
+export const createContainerizedDatabase = async (password: string, port: number) => {
+
+    // Kills a running postgres container if one exists
+    // Starts a new container with the expected values
+    const createContainerizedPostgresCommand = `
+        docker container stop node_flyway_postgres_db
+        docker container rm node_flyway_postgres_db
+        docker run -d --name node_flyway_postgres_db --env POSTGRES_PASSWORD=${password} -p ${port}:5432 postgres
+    `;
 
     logger.log("Creating clean database build for integration test...");
 
-    const command = "sh test/integration/setup/create-postgres-container.sh";
 
     try {
       await new Promise<void>((resolve, reject) => {
-         execute(command, {silent: true}, (code, stdout) => {
+         execute(createContainerizedPostgresCommand, {silent: true}, (code, stdout) => {
              if (code == 0) {
                  resolve();
              }
@@ -40,14 +64,19 @@ export const createContainerizedPostgres = async () => {
         logger.log("Successfully created clean database.")
     }
     catch(err: any) {
-        throw Error("Requires docker to be installed and a docker daemon to be running in order to execute the integration tests.");
+        throw Error("Requires docker to be installed and a docker daemon to be running in order to execute the integration tests locally.");
     }
 };
 
 
-export const pollDatabaseForLiveness = async (maxAttempts: number, waitInterval: number) => {
+const pollDatabaseForLiveness = async (
+    password: string,
+    port: number,
+    maxAttempts: number,
+    waitInterval: number
+) => {
 
-    const checkDatabaseLiveness = `psql postgresql://postgres:password123@localhost:2575 -c "\\d"`;
+    const checkDatabaseLiveness = `psql postgresql://postgres:${password}@localhost:${port} -c "\\d"`;
 
     for (let i = 0; i < maxAttempts; i++) {
 
