@@ -11,7 +11,7 @@ import {
     NodeFlywayResponse
 } from "./response/responses";
 import {ExecutionOptions, FlywayAdvancedConfig, FlywayConfig, FlywayOptionalConfig} from "./types/types";
-import * as autoBind from "auto-bind";
+import autoBind from "auto-bind";
 import {enableLogging} from "./utility/logger";
 
 export class Flyway {

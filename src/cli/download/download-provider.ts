@@ -1,4 +1,4 @@
-import * as decompress from "decompress";
+import decompress from "decompress";
 import {mkdir, rm, stat} from "fs/promises";
 import {FlywayVersion} from "../../internal/flyway-version";
 import {hasFullPermissionsOnFile} from "../../utility/utility";
