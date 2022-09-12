@@ -1,12 +1,12 @@
-import * as decompress from "decompress";
+import decompress from "decompress";
 import {mkdir, rm, stat} from "fs/promises";
 import {FlywayVersion} from "../../internal/flyway-version";
 import {hasFullPermissionsOnFile} from "../../utility/utility";
 import {FlywayCliProvider} from "../flyway-cli-provider";
 // @ts-ignore - fix missing types
-import * as decompressTargz from "decompress-targz";
+import decompressTargz from "decompress-targz";
 // @ts-ignore - fix missing types
-import * as decompressUnzip from "decompress-unzip";
+import decompressUnzip from "decompress-unzip";
 import {resolve} from "path";
 import {FlywayCliSource} from "../../types/types";
 import {getLogger} from "../../utility/logger";

@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { stat } from "fs/promises";
 import { describe } from "mocha";
 import { join } from "path";
-import * as _temp from "temp";
+import _temp from "temp";
 import { DownloadProvider } from "../../../../src/cli/download/download-provider";
 import { FlywayVersion } from "../../../../src";
 import { MockFlywayCliDownloader } from "../../utility/mock-flyway-cli-downloader";
@@ -73,7 +73,7 @@ describe("FlywayCliDownloadProvider", () => {
         
         let error;
         try {
-            stat(join(temporaryDirectory, mockFlywayCliDownloader.getCompressedFlywayCliFileName()));
+            await stat(join(temporaryDirectory, mockFlywayCliDownloader.getCompressedFlywayCliFileName()));
         }
         catch (err) {
             error = err;
