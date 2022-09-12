@@ -1,4 +1,4 @@
-import * as _temp from "temp";
+import _temp from "temp";
 import { FlywayVersion } from "../../internal/flyway-version";
 import { FlywayCli } from "../flyway-cli";
 import { FlywayCliProvider } from "../flyway-cli-provider";

@@ -9,7 +9,7 @@
     "strict": true,
     "noImplicitAny": true,
     "declaration": true,
-    "importHelpers": true,
+    "importHelpers": false,
     "lib": [ "es2017", "dom" ],
     "types": ["node"]
   }
