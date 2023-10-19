@@ -37,7 +37,7 @@ export class ShortCircuitFileSystemFlywayCliProvider extends FlywayCliProvider {
             );
         }
 
-        const executable = await FlywayCliService.getExecutableFromFlywayCli(this.directory);
+        const executable = await FlywayCliService.getExecutableFromFlywayCliDirectory(this.directory);
 
         ShortCircuitFileSystemFlywayCliProvider.logger.log(
             `Successfully found a Flyway CLI with path: ${this.directory} using the optimized local CLI strategy.`

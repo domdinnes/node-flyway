@@ -1,9 +1,5 @@
-/*
-    Given a directory path, determine if this is a flyway CLI and the version
-*/
-
 import { readFile } from "fs/promises";
-import { join } from "path";
+import path, { join } from "path";
 import { FlywayVersion, getFlywayCliVersionForHash } from "../../internal/flyway-version";
 import { existsAndIsDirectory, findAllExecutableFilesInDirectory, globPromise } from "../../utility/utility";
 import md5 = require("md5");
@@ -12,15 +8,18 @@ import { FlywayExecutable } from "../flyway-cli";
 
 export class FlywayCliService {
 
+    /*
+        Given a directory path, determine if this is a flyway CLI and the version
+    */
     static async getFlywayCliDetails(
-        directory: string
+        flywayCliDirectory: string
     ): Promise<{version: FlywayVersion, hash: string} | undefined> {
 
-        if(!existsAndIsDirectory(directory)) {
+        if(!await existsAndIsDirectory(flywayCliDirectory)) {
             return undefined;
         }
 
-        const hash = await this.getFlywayCliHash(directory);
+        const hash = await this.getFlywayCliHash(flywayCliDirectory);
 
         if(hash == undefined) {
             return undefined;
@@ -38,10 +37,14 @@ export class FlywayCliService {
         }
     }
 
+    /*
+        Returns an MD5 hash of the Flyway CLI if the provided directory contains a Flyway CLI.
+        Otherwise, returns undefined.
+     */
     static async getFlywayCliHash(
-        directory: string
+        flywayCliDirectory: string
     ): Promise<string | undefined> {
-        const paths = await FlywayCliService.getFlywayCommandLineFiles(directory);
+        const paths = await FlywayCliService.getFlywayCommandLineFiles(flywayCliDirectory);
 
         if(paths.length == 0) {
             return undefined;
@@ -62,13 +65,13 @@ export class FlywayCliService {
 
 
 
-    static async getExecutableFromFlywayCli(
-        directory: string
+    static async getExecutableFromFlywayCliDirectory(
+        flywayCliDirectory: string
     ): Promise<FlywayExecutable> {
-        const executableFiles = await findAllExecutableFilesInDirectory(directory);
+        const executableFiles = await findAllExecutableFilesInDirectory(flywayCliDirectory);
 
         if (executableFiles.length == 0) {
-            throw new Error(`Unable to find an executable Flyway CLI in target directory: ${directory}`);
+            throw new Error(`Unable to find an executable Flyway CLI in target directory: ${flywayCliDirectory}`);
         }
 
         if (executableFiles.length > 1) {
@@ -81,18 +84,21 @@ export class FlywayCliService {
                 );
             }
             else {
-                join(directory, executableFilesWithCorrectName[0].name);
+                join(flywayCliDirectory, executableFilesWithCorrectName[0].name);
             }
         }
 
-        return new FlywayExecutable(join(directory, executableFiles[0].name));
+        return new FlywayExecutable(join(flywayCliDirectory, executableFiles[0].name));
     }
 
 
-
+    /*
+        Specifically looks for the command-line JAR files to compute the hash.
+        This archive file is a good candidate to compute the hash as it is easily accessible, represents the entire library & is unique per Flyway version.
+     */
     private static async getFlywayCommandLineFiles(directory: string) {
-        const paths_a = await globPromise(`${directory}/lib/community/flyway-commandline-*.jar`);
-        const paths_b = await globPromise(`${directory}/lib/flyway-commandline-*.jar`);
+        const paths_a = await globPromise(`${directory}${path.sep}lib${path.sep}community${path.sep}flyway-commandline-*.jar`);
+        const paths_b = await globPromise(`${directory}${path.sep}lib${path.sep}flyway-commandline-*.jar`);
 
         return paths_a.concat(paths_b);
     }

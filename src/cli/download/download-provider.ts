@@ -83,7 +83,7 @@ export class DownloadProvider extends FlywayCliProvider {
 
         await rm(archiveLocation, {force: true});
         
-        const executable = await FlywayCliService.getExecutableFromFlywayCli(extractedDirectory);
+        const executable = await FlywayCliService.getExecutableFromFlywayCliDirectory(extractedDirectory);
 
         const hash = await FlywayCliService.getFlywayCliHash(extractedDirectory);
 

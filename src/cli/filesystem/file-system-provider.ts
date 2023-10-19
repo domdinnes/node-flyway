@@ -13,7 +13,7 @@ export class FileSystemFlywayCliProvider extends FlywayCliProvider {
     protected static logger = getLogger("FileSystemFlywayCliProvider");
     
     constructor(
-        private directory: string
+        private flywayCliDirectory: string
     ) {
         super()
     }
@@ -27,15 +27,15 @@ export class FileSystemFlywayCliProvider extends FlywayCliProvider {
         flywayVersion: FlywayVersion
     ): Promise<FlywayCli | undefined> {
 
-        const existingVersionDetails = await FlywayCliService.getFlywayCliDetails(this.directory);
+        const existingVersionDetails = await FlywayCliService.getFlywayCliDetails(this.flywayCliDirectory);
         
         if(existingVersionDetails != null) {
             if(existingVersionDetails.version == flywayVersion) {
-                const executable = await FlywayCliService.getExecutableFromFlywayCli(this.directory);
+                const executable = await FlywayCliService.getExecutableFromFlywayCliDirectory(this.flywayCliDirectory);
                 return new FlywayCli(
                     existingVersionDetails.version,
                     FlywayCliSource.FILE_SYSTEM,
-                    this.directory,
+                    this.flywayCliDirectory,
                     executable,
                     existingVersionDetails.hash
                 );
@@ -46,15 +46,15 @@ export class FileSystemFlywayCliProvider extends FlywayCliProvider {
         }
 
         FileSystemFlywayCliProvider.logger.log(
-            `Provided directory ${this.directory} is not a Flyway CLI. Searching nested directories to find a Flyway CLI candidate with version ${FlywayVersion[flywayVersion]}.`
+            `Provided directory ${this.flywayCliDirectory} is not a Flyway CLI. Searching nested directories to find a Flyway CLI candidate with version ${FlywayVersion[flywayVersion]}.`
         );
         
         const otherVersions: FlywayVersion[] = [];
 
         // Iterate through all child directories searching for CLI with matching version
-        const directories: string[] = (await readdir(this.directory, { withFileTypes : true}))
+        const directories: string[] = (await readdir(this.flywayCliDirectory, { withFileTypes : true}))
             .filter(file => file.isDirectory())
-            .map(dir => path.join(this.directory, dir.name));
+            .map(dir => path.join(this.flywayCliDirectory, dir.name));
 
         const targetFlywayCli = (await Promise.all(
             directories.map(async directory => {
@@ -80,13 +80,13 @@ export class FileSystemFlywayCliProvider extends FlywayCliProvider {
 
         if(targetFlywayCli == null) {
             const error = otherVersions.length == 0
-                ? new Error(`No child directory of ${this.directory} is a Flyway CLI with version ${FlywayVersion[flywayVersion]}.`)
-                : new Error(`No child directory of ${this.directory} is a Flyway CLI with version ${FlywayVersion[flywayVersion]}. Only found versions: ${otherVersions.map(version => FlywayVersion[version])}.`);
+                ? new Error(`No child directory of ${this.flywayCliDirectory} is a Flyway CLI with version ${FlywayVersion[flywayVersion]}.`)
+                : new Error(`No child directory of ${this.flywayCliDirectory} is a Flyway CLI with version ${FlywayVersion[flywayVersion]}. Only found versions: ${otherVersions.map(version => FlywayVersion[version])}.`);
             throw error;
             // Suggest either enabling downloads or adding a new version to the source directory
         }
         
-        const executable = await FlywayCliService.getExecutableFromFlywayCli(targetFlywayCli.directory);
+        const executable = await FlywayCliService.getExecutableFromFlywayCliDirectory(targetFlywayCli.directory);
 
         return new FlywayCli(
             flywayVersion,
