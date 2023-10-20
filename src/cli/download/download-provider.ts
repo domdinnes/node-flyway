@@ -83,7 +83,7 @@ export class DownloadProvider extends FlywayCliProvider {
 
         await rm(archiveLocation, {force: true});
         
-        const executable = await FlywayCliService.getExecutableFromFlywayCli(extractedDirectory);
+        const executable = await FlywayCliService.getExecutableFromFlywayCliDirectory(extractedDirectory);
 
         const hash = await FlywayCliService.getFlywayCliHash(extractedDirectory);
 
@@ -107,6 +107,7 @@ export class DownloadProvider extends FlywayCliProvider {
         if(files.length == 0) {
             throw new Error("Weird. Expected some files to be extracted.");
         }
+        // TODO - ensure this works on Windows OS
         return path.join(outerDirectory, files[0].path.split(path.sep)[0]);
     }
 

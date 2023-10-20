@@ -9,6 +9,10 @@ export abstract class FlywayCliProvider {
 
     public abstract getFlywayCli(flywayVersion: FlywayVersion) : Promise<FlywayCli | undefined>
 
+    /*
+        Used to chain providers together in a fluent interface.
+        Multiple strategies can be used to attempt to source a Flyway CLI until one is successful.
+     */
     public chain(provider: FlywayCliProvider): FlywayCliProvider {
         
         return {
