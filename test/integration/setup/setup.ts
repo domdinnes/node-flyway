@@ -52,7 +52,7 @@ export const createContainerizedDatabase = async (password: string, port: number
 
     try {
       await new Promise<void>((resolve, reject) => {
-         execute(createContainerizedPostgresCommand, {silent: true}, (code, stdout) => {
+         execute(createContainerizedPostgresCommand, {silent: false}, (code, stdout) => {
              if (code == 0) {
                  resolve();
              }
