@@ -75,7 +75,8 @@ const pollDatabaseForLiveness = async (
     maxAttempts: number,
     waitInterval: number
 ) => {
-    const checkDatabaseLiveness = `export PGPASSWORD=${password}; psql --host=localhost --port=${port} --username=postgres --dbname=postgres --command="\\d"`;
+    // const checkDatabaseLiveness = `export PGPASSWORD=${password}; psql --host=localhost --port=${port} --username=postgres --dbname=postgres --command="\\d"`;
+    const checkDatabaseLiveness = `psql postgresql://postgres:${password}@localhost:${port} -c "\\d"`;
 
     for (let i = 0; i < maxAttempts; i++) {
 
@@ -87,9 +88,9 @@ const pollDatabaseForLiveness = async (
                         resolve();
                     }
                     else {
-                        console.log(code);
-                        console.log(stdout);
-                        console.log(stderr);
+                        logger.log(code);
+                        logger.log(stdout);
+                        logger.log(stderr);
                         reject(stderr);
                     }
                 });
