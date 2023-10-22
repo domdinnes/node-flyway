@@ -53,9 +53,6 @@ jobs:
           command: printf "export PATH=\${PATH}:/c/'Program Files'/PostgreSQL/14/bin" >> ~/.bashrc
           shell: bash.exe
       - run:
-          command: source ~/.bashrc
-          shell: bash.exe
-      - run:
           command: wget https://get.enterprisedb.com/postgresql/postgresql-14.9-1-windows-x64.exe -P C:\Users\circleci\Downloads\
           shell: cmd.exe
       - run:
@@ -63,7 +60,7 @@ jobs:
           shell: cmd.exe
       - run: npm install
       - run:
-          command: npm run test:integration-pipeline
+          command: source ~/.bashrc; npm run test:integration-pipeline
           shell: bash.exe
 
 workflows:
