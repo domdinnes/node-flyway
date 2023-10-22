@@ -75,8 +75,8 @@ const pollDatabaseForLiveness = async (
     maxAttempts: number,
     waitInterval: number
 ) => {
-    const checkDatabaseLiveness = `psql --host=localhost --port=${port} --username=postgres --dbname=postgres --command="\\d"`;
-    //const checkDatabaseLiveness = `psql postgresql://postgres:${password}@localhost:${port} -c "\\d"`;
+    //const checkDatabaseLiveness = `psql --host=localhost --port=${port} --username=postgres --dbname=postgres --command="\\d"`;
+    const checkDatabaseLiveness = `psql postgresql://postgres:${password}@localhost:${port} -c "\\d"`;
 
     for (let i = 0; i < maxAttempts; i++) {
 
