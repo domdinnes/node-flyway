@@ -61,7 +61,7 @@ jobs:
       - run: npm install
       - run:
           command: npm run test:integration-pipeline
-          shell: cmd.exe
+          shell: bash.exe
 
 workflows:
   test-workflow:
