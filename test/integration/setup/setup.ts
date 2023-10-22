@@ -87,6 +87,9 @@ const pollDatabaseForLiveness = async (
                         resolve();
                     }
                     else {
+                        console.log(code);
+                        console.log(stdout);
+                        console.log(stderr);
                         reject(stderr);
                     }
                 });
