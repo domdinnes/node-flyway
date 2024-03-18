@@ -10,7 +10,7 @@
     "noImplicitAny": true,
     "declaration": true,
     "importHelpers": false,
-    "lib": [ "es2017", "dom" ],
+    "lib": [ "es2021", "dom" ],
     "types": ["node"]
   }
 }
