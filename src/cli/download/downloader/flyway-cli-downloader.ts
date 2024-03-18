@@ -2,6 +2,7 @@ import { join } from "path";
 import { FlywayVersion, getUrlComponentsForFlywayVersion } from "../../../internal/flyway-version";
 import {DownloaderHelper} from "node-downloader-helper";
 import {getLogger, Logger} from "../../../utility/logger";
+import {getHostOperatingSystem, OperatingSystem} from "../../../utility/utility";
 
 /*
     Takes a flyway version and a save directory.
@@ -27,7 +28,7 @@ export class DirectFlywayCliDownloader implements FlywayCliDownloader {
         flywayVersion: FlywayVersion,
         saveDirectory: string
     ): Promise<string> {
-        const operatingSystem = FlywayCliUrlBuilder.getUrlRepresentationOfHostOperatingSystem();
+        const operatingSystem = getHostOperatingSystem();
         const url = FlywayCliUrlBuilder.buildUrl(flywayVersion, operatingSystem);
         await this.download(url.url, saveDirectory);
         return join(saveDirectory, url.fileName);
@@ -51,22 +52,10 @@ export class DirectFlywayCliDownloader implements FlywayCliDownloader {
 
 }
 
-type OperatingSystem = "macosx" | "linux" | "windows";
 
 
 export class FlywayCliUrlBuilder {
 
-    public static getUrlRepresentationOfHostOperatingSystem(): OperatingSystem {
-        const platform = process.platform;
-
-        if(platform == "win32") {
-            return "windows";
-        }
-        if(platform == "darwin") {
-            return "macosx";
-        }
-        return "linux";
-    }
 
     public static buildUrl(
         flywayVersion: FlywayVersion,

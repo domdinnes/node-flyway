@@ -107,8 +107,8 @@ export class DownloadProvider extends FlywayCliProvider {
         if(files.length == 0) {
             throw new Error("Weird. Expected some files to be extracted.");
         }
-        // TODO - ensure this works on Windows OS
-        return path.join(outerDirectory, files[0].path.split(path.sep)[0]);
+        // Files returned by decompress always use path separator '/' rather than the platform specific version.
+        return path.join(outerDirectory, files[0].path.split('/')[0]);
     }
 
     private async decompressFiles(

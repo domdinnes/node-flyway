@@ -1,7 +1,12 @@
 import { readFile } from "fs/promises";
 import path, { join } from "path";
 import { FlywayVersion, getFlywayCliVersionForHash } from "../../internal/flyway-version";
-import { existsAndIsDirectory, findAllExecutableFilesInDirectory, globPromise } from "../../utility/utility";
+import {
+    existsAndIsDirectory,
+    findAllExecutableFilesInDirectory,
+    getHostOperatingSystem,
+    globPromise
+} from "../../utility/utility";
 import md5 = require("md5");
 import { FlywayExecutable } from "../flyway-cli";
 
@@ -97,10 +102,10 @@ export class FlywayCliService {
         This archive file is a good candidate to compute the hash as it is easily accessible, represents the entire library & is unique per Flyway version.
      */
     private static async getFlywayCommandLineFiles(directory: string) {
-        const paths_a = await globPromise(`${directory}${path.sep}lib${path.sep}community${path.sep}flyway-commandline-*.jar`);
-        const paths_b = await globPromise(`${directory}${path.sep}lib${path.sep}flyway-commandline-*.jar`);
+        const mappedDirectory = getHostOperatingSystem() == 'windows' ? directory.replaceAll('\\', '/') : directory;
+        const paths_a = await globPromise(`${mappedDirectory}/lib/community/flyway-commandline-*.jar`);
+        const paths_b = await globPromise(`${mappedDirectory}/lib/flyway-commandline-*.jar`);
 
         return paths_a.concat(paths_b);
     }
-
 }
