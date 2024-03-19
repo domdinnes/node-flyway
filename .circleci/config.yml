@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  win: circleci/windows@5.0
+
 jobs:
   build:
     docker:
@@ -24,12 +27,41 @@ jobs:
       - image: cimg/postgres:14.0
         environment:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password-123
-
+          POSTGRES_PASSWORD: postgres
     steps:
       - checkout
       - run: npm install
       - run: npm run test:integration-pipeline
+
+  integration-test-windows:
+    executor:
+      name: win/default
+      shell: powershell.exe
+    steps:
+      - checkout
+      - run: choco install wget -y
+      - run:
+          command: wget https://nodejs.org/dist/v16.17.0/node-v16.17.0-x86.msi -P C:\Users\circleci\Downloads\
+          shell: cmd.exe
+      - run: MsiExec.exe /i C:\Users\circleci\Downloads\node-v16.17.0-x86.msi /qn
+      - run:
+          command: |
+            Start-Process powershell -verb runAs -Args "-start GeneralProfile"
+            nvm install 16.17.0
+            nvm use 16.17.0
+      - run:
+          command: printf "export PATH=\${PATH}:/c/'Program Files'/PostgreSQL/14/bin" >> ~/.bashrc
+          shell: bash.exe
+      - run:
+          command: wget https://get.enterprisedb.com/postgresql/postgresql-14.9-1-windows-x64.exe -P C:\Users\circleci\Downloads\
+          shell: cmd.exe
+      - run:
+          command: C:\Users\circleci\Downloads\postgresql-14.9-1-windows-x64.exe --unattendedmodeui none --mode unattended
+          shell: cmd.exe
+      - run: npm install
+      - run:
+          command: source ~/.bashrc; npm run test:integration-pipeline
+          shell: bash.exe
 
 workflows:
   test-workflow:
@@ -37,3 +69,4 @@ workflows:
       - build
       - unit-test
       - integration-test
+      - integration-test-windows
