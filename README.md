@@ -152,7 +152,7 @@ flyway.migrate().then(response => {
 ### <a name="api-migrate"></a> migrate(config?: FlywayConfig)
 #### Description
 Applies migrations against a database.
-For more information see the Flyway documentation for the [migrate command](https://Flyway.org/documentation/command/migrate).
+For more information see the Flyway documentation for the [migrate command](https://flywaydb.org/documentation/command/migrate).
 
 Information about possible configuration options is documented [here](#configuration-options).
 #### Usage
@@ -214,7 +214,7 @@ const response = {
 #### Description
 Removes all schemas, tables and objects managed by Flyway.
 This effectively resets a database and shouldn't be run against production.
-For more information see the Flyway documentation for the [clean command](https://Flyway.org/documentation/command/clean).
+For more information see the Flyway documentation for the [clean command](https://flywaydb.org/documentation/command/clean).
 
 Information about possible configuration options is documented [here](#configuration-options).
 #### Usage
@@ -256,7 +256,7 @@ const response = {
 ### <a name="api-info"></a> info(config?: FlywayConfig)
 #### Description
 Returns information about the applied migrations.
-For more information see the Flyway documentation for the [info command](https://Flyway.org/documentation/command/info).
+For more information see the Flyway documentation for the [info command](https://flywaydb.org/documentation/command/info).
 
 Information about possible configuration options is documented [here](#configuration-options).
 #### Usage
@@ -326,7 +326,7 @@ const response = {
 ### <a name="api-validate"></a> validate(config?: FlywayConfig)
 #### Description
 Validates the pending migrations against the applied migrations.
-For more information see the Flyway documentation for the [validate command](https://Flyway.org/documentation/command/validate).
+For more information see the Flyway documentation for the [validate command](https://flywaydb.org/documentation/command/validate).
 
 Information about possible configuration options is documented [here](#configuration-options).
 #### Usage
@@ -392,7 +392,7 @@ const response = {
 ### <a name="api-baseline"></a> baseline(config?: FlywayConfig)
 #### Description
 Creates a baseline migration at a specific version. Pending migrations at or below this version won't be applied.
-For more information see the Flyway documentation for the [baseline command](https://Flyway.org/documentation/command/baseline).
+For more information see the Flyway documentation for the [baseline command](https://flywaydb.org/documentation/command/baseline).
 
 Information about possible configuration options is documented [here](#configuration-options).
 #### Usage
@@ -415,7 +415,7 @@ Performs several functions including:
 - Aligns checksums of pending migrations, where the checksum has changed vs the applied migration.
 - Cleans up failed migrations for databases without DDL transactions. 
 
-For more information see the Flyway documentation for the [repair command](https://Flyway.org/documentation/command/repair).
+For more information see the Flyway documentation for the [repair command](https://flywaydb.org/documentation/command/repair).
 
 Information about possible configuration options is documented [here](#configuration-options).
 #### Usage
