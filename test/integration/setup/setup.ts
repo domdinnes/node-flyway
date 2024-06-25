@@ -52,7 +52,7 @@ export const createContainerizedDatabase = async (password: string, port: number
 
     try {
       await new Promise<void>((resolve, reject) => {
-         execute(createContainerizedPostgresCommand, {silent: true}, (code, stdout) => {
+         execute(createContainerizedPostgresCommand, {silent: false}, (code, stdout) => {
              if (code == 0) {
                  resolve();
              }
@@ -75,7 +75,7 @@ const pollDatabaseForLiveness = async (
     maxAttempts: number,
     waitInterval: number
 ) => {
-
+    //const checkDatabaseLiveness = `psql --host=localhost --port=${port} --username=postgres --dbname=postgres --command="\\d"`;
     const checkDatabaseLiveness = `psql postgresql://postgres:${password}@localhost:${port} -c "\\d"`;
 
     for (let i = 0; i < maxAttempts; i++) {
@@ -88,6 +88,9 @@ const pollDatabaseForLiveness = async (
                         resolve();
                     }
                     else {
+                        logger.log(code);
+                        logger.log(stdout);
+                        logger.log(stderr);
                         reject(stderr);
                     }
                 });

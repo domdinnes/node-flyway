@@ -6,7 +6,7 @@ export const port = 5432;
 export const testConfiguration = {
     url: `jdbc:postgresql://localhost:${port}/postgres`,
     user: "postgres",
-    password: "password123",
+    password: "postgres",
     defaultSchema: "public",
     port: port
 };
