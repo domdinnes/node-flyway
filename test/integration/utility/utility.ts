@@ -102,3 +102,7 @@ export async function getDatabaseConnection(
     await databaseClient.connect(configuration);
     return databaseClient.getConnection();
 }
+
+export async function disconnectDatabase() {
+    await databaseClient.disconnect();
+}

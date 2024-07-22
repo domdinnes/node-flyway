@@ -3,7 +3,7 @@ import {cleanDatabase} from "./setup/setup";
 import {Flyway, FlywayCliStrategy} from "../../src";
 import {expect} from "chai";
 import {
-    basicMigrations,
+    basicMigrations, disconnectDatabase,
     failingMigrations,
     getDatabaseConnection,
     missingMigrations,
@@ -15,9 +15,13 @@ import {
 
 describe("migrate()", () => {
 
-    beforeEach(() => {
-        return cleanDatabase();
+    beforeEach(async () => {
+        await cleanDatabase();
     });
+
+    afterEach(async () => {
+        await disconnectDatabase();
+    })
 
 
     it('can perform a basic migrate', async () => {
