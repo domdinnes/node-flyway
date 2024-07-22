@@ -1,14 +1,14 @@
 import {exec as execute} from "shelljs";
 import {getLogger} from "../../../src/utility/logger";
 import {Flyway} from "../../../src";
-import {testConfiguration} from "../utility/utility";
+import {getDatabaseConnection, testConfiguration} from "../utility/utility";
 
 export const logger = getLogger("DatabaseSetup", "integration-test");
 
 
 export const performDatabaseLivenessCheck = async (password: string, port: number) => {
     const pollCount = 10;
-    const databaseLivenessCheckResult = await pollDatabaseForLiveness(password, port, pollCount, 300);
+    const databaseLivenessCheckResult = await pollDatabaseForLiveness(password, port, pollCount, 1000);
 
     if (databaseLivenessCheckResult.success) {
         logger.log(`Database is live and ready to receive connections on port: ${port}. Liveness check completed after ${databaseLivenessCheckResult.attempts} attempts.`)
@@ -76,22 +76,11 @@ const pollDatabaseForLiveness = async (
     waitInterval: number
 ) => {
 
-    const checkDatabaseLiveness = `psql postgresql://postgres:${password}@localhost:${port} -c "\\d"`;
-
     for (let i = 0; i < maxAttempts; i++) {
 
         try {
-            await new Promise<void>((resolve, reject) => {
-                logger.log(`Attempt ${i+1}/${maxAttempts} to check liveness of database.`)
-                execute(checkDatabaseLiveness, {silent: true}, (code, stdout, stderr) => {
-                    if (code == 0) {
-                        resolve();
-                    }
-                    else {
-                        reject(stderr);
-                    }
-                });
-            });
+            logger.log(`Attempt ${i+1}/${maxAttempts} to check liveness of database.`)
+            await getDatabaseConnection(password, port);
 
             return {
                 attempts: i+1,
@@ -99,7 +88,6 @@ const pollDatabaseForLiveness = async (
             };
         }
         catch(err: any) {}
-
         logger.log(`Database failed liveness check. Waiting ${waitInterval}ms to retry.`)
         await sleep(waitInterval);
     }
