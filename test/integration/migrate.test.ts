@@ -3,8 +3,9 @@ import {cleanDatabase} from "./setup/setup";
 import {Flyway, FlywayCliStrategy} from "../../src";
 import {expect} from "chai";
 import {
-    basicMigrations,
+    basicMigrations, disconnectDatabase,
     failingMigrations,
+    getDatabaseConnection,
     missingMigrations,
     multipleSchemaMigrations,
     outOfOrderMigrations,
@@ -14,9 +15,13 @@ import {
 
 describe("migrate()", () => {
 
-    beforeEach(() => {
-        return cleanDatabase();
+    beforeEach(async () => {
+        await cleanDatabase();
     });
+
+    afterEach(async () => {
+        await disconnectDatabase();
+    })
 
 
     it('can perform a basic migrate', async () => {
@@ -29,8 +34,6 @@ describe("migrate()", () => {
         );
 
         const response = await flyway.migrate();
-
-        //logger.log(inspectResponse(response));
 
         expect(response.success).to.be.true;
     });
@@ -240,8 +243,6 @@ describe("migrate()", () => {
     });
 
 
-
-
     it('can perform migrations across multiple schemas', async () => {
 
         const flyway = new Flyway(
@@ -259,6 +260,52 @@ describe("migrate()", () => {
         expect(response.success).to.be.true;
 
     });
+
+
+    /*
+        Handles the case where a generated Flyway command-line string should escape all substrings that can be interpreted
+        by the shell as anything other than a string literal.
+
+        This test case includes a shell variable within the configuration properties.
+        The desired behaviour is that this should be escaped and treated as a string literal.
+
+     */
+    xit('can migrate a schema when configuration contains shell-expansion characters', async () => {
+
+        // Given
+        // ... the schemas property includes a shell variable
+        const flyway = new Flyway(
+            {
+                ...testConfiguration,
+                migrationLocations: [basicMigrations],
+                advanced: {
+                    schemas: [
+                        "__test_$PWD_schema"
+                    ]
+                }
+            }
+        );
+
+        // When
+        // ... the Flyway migrate command is applied
+        await flyway.migrate();
+
+
+
+        // Then
+        // ... a schema exists with the exact name specified in the configuration
+        const connection = await getDatabaseConnection(
+            testConfiguration.password,
+            testConfiguration.port
+        );
+
+        const results =await connection.query(`
+            SELECT CATALOG_NAME, SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '__test_$PWD_schema'
+        `);
+
+        expect(results.rowCount).to.equal(1);
+    });
+
 
 
 });

@@ -12,6 +12,7 @@
     "test:integration-pipeline": "mocha --recursive --extension .test.ts --timeout 600000 -r ts-node/register test/integration -r test/integration/setup/pipeline.ts"
   },
   "dependencies": {
+    "@types/pg": "^8.11.6",
     "auto-bind": "4.0.0",
     "debug": "^4.3.4",
     "decompress": "^4.2.1",
@@ -36,6 +37,7 @@
     "chai": "^4.3.6",
     "deep-equal-in-any-order": "^2.0.0",
     "mocha": "^10.0.0",
+    "pg": "^8.12.0",
     "source-map-support": "^0.5.21",
     "ts-node": "^10.8.2",
     "typescript": "^4.7.4"
