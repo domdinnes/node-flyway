@@ -1,5 +1,6 @@
 import {isMap} from "util/types";
 import {CommandLineOptionMap, FlywayAdvancedConfig, FlywayBasicConfig, FlywayConfig} from "../types/types";
+import {platform} from "os";
 
 
 
@@ -46,10 +47,8 @@ class FlywayCommandLineStandardOption implements FlywayCommandLineOption {
     }
 
     convertToCommandLineString(): string {
-        const commandLineOptionValue = this.commandLineOptionValue.includes(" ")
-            ? `"${this.commandLineOptionValue}"`
-            : this.commandLineOptionValue;
-        return `-${this.commandLineOptionKey}=${commandLineOptionValue}`;
+        const quote = platform() === "win32" ? '"' : "'";
+        return `-${this.commandLineOptionKey}=${quote}${this.commandLineOptionValue}${quote}`;
     }
 }
 
@@ -63,7 +62,8 @@ class FlywayCommandLineArrayOption<T> implements FlywayCommandLineOption {
     }
 
     convertToCommandLineString(): string {
-        return `-${this.commandLineOptionKey}="${this.commandLineOptionValues.join(",")}"`;
+        const quote = platform() === "win32" ? '"' : "'";
+        return `-${this.commandLineOptionKey}=${quote}${this.commandLineOptionValues.join(',')}${quote}`;
     }
 
 }
@@ -78,10 +78,11 @@ class FlywayCommandLineMapOption implements FlywayCommandLineOption {
 
     convertToCommandLineString(): string {
         const commandLineStringParts: string[] = [];
+        const quote = platform() === 'win32' ? '"' : "'";
 
         // Throw if keys include whitespace
         this.commandLineOptionMapValues.forEach((key, val) => {
-            commandLineStringParts.push(`${this.commandLineOptionKey}.${key}="${val}"`);
+            commandLineStringParts.push(`${this.commandLineOptionKey}.${key}=${quote}${val}${quote}`);
         });
 
         return commandLineStringParts.join(" ");

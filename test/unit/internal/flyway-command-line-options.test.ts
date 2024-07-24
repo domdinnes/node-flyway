@@ -16,15 +16,15 @@ describe("CommandLineOptionGenerator", () => {
 
         const result = FlywayCommandLineOptions.build(config);
 
-        expect(result.getCommandLineOptions()).to.contains.members(
-            [
-                '-url=test-url',
-                '-user=test-user',
-                '-locations="dir_1,dir_2"'
-            ]
-        );
-
         expect(result.getCommandLineOptions()).to.have.length(3);
+
+        result.getCommandLineOptions().forEach((option, i) => {
+            expect(option).to.match([
+                /^-url=['"]test-url['"]$/,
+                /^-user=['"]test-user['"]$/,
+                /^-locations=['"]dir_1,dir_2['"]$/
+            ][i]);
+        });
     });
 
 
@@ -46,20 +46,21 @@ describe("CommandLineOptionGenerator", () => {
 
         const result = FlywayCommandLineOptions.build(config);
 
-        expect(result.getCommandLineOptions()).to.contains.members(
-            [
-                '-url=test-url',
-                '-user=test-user',
-                '-locations="dir_1,dir_2"',
-                '-createSchemas=true',
-                '-outOfOrder=true',
-                '-sqlMigrationPrefix=V__',
-                '-initSql="CREATE TABLE random.some_table (id INTEGER PRIMARY KEY, some_column TEXT NOT NULL);"',
-                '-group=true'
-            ]
-        );
-
         expect(result.getCommandLineOptions()).to.have.length(8);
+
+        result.getCommandLineOptions().forEach((option, i) => {
+            expect(option).to.match([
+                /^-url=['"]test-url['"]$/,
+                /^-user=['"]test-user['"]$/,
+                /^-locations=['"]dir_1,dir_2['"]$/,
+                /^-createSchemas=['"]true['"]$/,
+                /^-outOfOrder=['"]true['"]$/,
+                /^-sqlMigrationPrefix=['"]V__['"]$/,
+                /^-initSql=['"]CREATE TABLE random.some_table \(id INTEGER PRIMARY KEY, some_column TEXT NOT NULL\);['"]$/,
+                /^-group=['"]true['"]$/
+            ][i]);
+        });
+
     });
 
 
@@ -78,18 +79,19 @@ describe("CommandLineOptionGenerator", () => {
 
         const result = FlywayCommandLineOptions.build(config);
 
-        expect(result.getCommandLineOptions()).to.contains.members(
-            [
-                '-url=test-url',
-                '-user=test-user',
-                '-locations="dir_1,dir_2"',
-                '-createSchemas=true',
-                '-defaultSchema=public',
-                '-schemas="example"'
-            ]
-        );
 
         expect(result.getCommandLineOptions()).to.have.length(6);
+
+        result.getCommandLineOptions().forEach((option, i) => {
+            expect(option).to.match([
+                /^-url=['"]test-url['"]$/,
+                /^-user=['"]test-user['"]$/,
+                /^-defaultSchema=['"]public['"]$/,
+                /^-locations=['"]dir_1,dir_2['"]$/,
+                /^-createSchemas=['"]true['"]$/,
+                /^-schemas=['"]example['"]$/
+            ][i]);
+        });
     });
 
 
@@ -109,18 +111,18 @@ describe("CommandLineOptionGenerator", () => {
 
         const result = FlywayCommandLineOptions.build(config);
 
-        expect(result.getCommandLineOptions()).to.contains.members(
-            [
-                '-url=jdbc:postgresql://localhost:2575/postgres',
-                '-user=postgres',
-                '-password=password123',
-                '-defaultSchema=public',
-                '-locations="test/integration/migrations/1_basic_migrations"',
-                '-cleanDisabled=false'
-            ]
-        );
-
         expect(result.getCommandLineOptions()).to.have.length(6);
+
+        result.getCommandLineOptions().forEach((option, i) => {
+            expect(option).to.match([
+                /^-url=['"]jdbc:postgresql:\/\/localhost:2575\/postgres['"]$/,
+                /^-user=['"]postgres['"]$/,
+                /^-password=['"]password123['"]$/,
+                /^-defaultSchema=['"]public['"]$/,
+                /^-locations=['"]test\/integration\/migrations\/1_basic_migrations['"]$/,
+                /^-cleanDisabled=['"]false['"]$/,
+            ][i]);
+        });
     });
 
 

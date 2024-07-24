@@ -270,7 +270,7 @@ describe("migrate()", () => {
         The desired behaviour is that this should be escaped and treated as a string literal.
 
      */
-    xit('can migrate a schema when configuration contains shell-expansion characters', async () => {
+    it('can migrate a schema when configuration contains shell-expansion characters', async () => {
 
         // Given
         // ... the schemas property includes a shell variable
