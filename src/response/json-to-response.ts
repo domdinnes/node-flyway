@@ -26,6 +26,9 @@ export class ConvertJsonToResponse {
         }
         catch (err) {
             ConvertJsonToResponse.logger.log(err);
+            if (err instanceof SyntaxError) {
+                ConvertJsonToResponse.logger.log(json);
+            } 
         }
 
 
