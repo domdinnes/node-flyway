@@ -1,6 +1,5 @@
 import { constants as FS_CONSTANTS } from "fs";
 import { access, readdir, stat } from "fs/promises";
-import { glob } from "glob";
 import { join } from "path";
 
 export type OperatingSystem = "macosx" | "linux" | "windows";
@@ -68,20 +67,4 @@ export const existsAndIsDirectory = async (directory: string) => {
     }
 
     return stats.isDirectory();
-}
-
-export const globPromise = (path: string): Promise<string[]> => {
-
-    return new Promise(
-        (resolve, reject) => {
-            glob(path, (err, matches) => {
-                if(err){
-                    reject(err);
-                }
-                else {
-                    resolve(matches);
-                }
-            })
-        }
-    );
 }
