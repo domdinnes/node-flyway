@@ -4,8 +4,7 @@ import { glob } from "glob";
 import { join } from "path";
 
 export type OperatingSystem = "macosx" | "linux" | "windows";
-
-
+export type CpuArchitecture = "arm" | "arm64" | "ia32" | "mips" | "mipsel" | "ppc" | "ppc64" | "s390" | "s390x" | "x64";
 
 export const getHostOperatingSystem = (): OperatingSystem => {
     const platform = process.platform;
@@ -19,6 +18,9 @@ export const getHostOperatingSystem = (): OperatingSystem => {
     return "linux";
 }
 
+export const getHostCpuArchitecture = (): CpuArchitecture => {
+    return process.arch;
+};
 
 export const findAllExecutableFilesInDirectory = async (path: string) => {
     const entries = await readdir(path, { withFileTypes : true})

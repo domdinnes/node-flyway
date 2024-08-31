@@ -2,7 +2,7 @@ import { join } from "path";
 import { FlywayVersion, getUrlComponentsForFlywayVersion } from "../../../internal/flyway-version";
 import {DownloaderHelper} from "node-downloader-helper";
 import {getLogger, Logger} from "../../../utility/logger";
-import {getHostOperatingSystem, OperatingSystem} from "../../../utility/utility";
+import {getHostOperatingSystem, OperatingSystem, getHostCpuArchitecture, CpuArchitecture} from "../../../utility/utility";
 
 /*
     Takes a flyway version and a save directory.
@@ -29,7 +29,8 @@ export class DirectFlywayCliDownloader implements FlywayCliDownloader {
         saveDirectory: string
     ): Promise<string> {
         const operatingSystem = getHostOperatingSystem();
-        const url = FlywayCliUrlBuilder.buildUrl(flywayVersion, operatingSystem);
+        const cpuArchitecture = getHostCpuArchitecture();
+        const url = FlywayCliUrlBuilder.buildUrl(flywayVersion, operatingSystem, cpuArchitecture);
         await this.download(url.url, saveDirectory);
         return join(saveDirectory, url.fileName);
     }
@@ -59,10 +60,11 @@ export class FlywayCliUrlBuilder {
 
     public static buildUrl(
         flywayVersion: FlywayVersion,
-        operatingSystem: OperatingSystem
+        operatingSystem: OperatingSystem,
+        cpuArchitecture: CpuArchitecture
     ): {url: string, fileName: string} {
         const urlComponents = getUrlComponentsForFlywayVersion(flywayVersion);
-        const fileName = this.buildFilename(flywayVersion, operatingSystem);
+        const fileName = this.buildFilename(flywayVersion, operatingSystem, cpuArchitecture);
         return {
             url: `https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${urlComponents.versionString}/${fileName}`,
             fileName
@@ -71,14 +73,15 @@ export class FlywayCliUrlBuilder {
 
     private static buildFilename(
         flywayVersion: FlywayVersion,
-        operatingSystem: OperatingSystem
+        operatingSystem: OperatingSystem,
+        cpuArchitecture: CpuArchitecture
     ): string {
         const urlComponents = getUrlComponentsForFlywayVersion(flywayVersion);
 
         if(urlComponents.operatingSystemSpecificUrl) {
             return operatingSystem != "windows"
-                ? `flyway-commandline-${urlComponents.versionString}-${operatingSystem}-x64.tar.gz`
-                : `flyway-commandline-${urlComponents.versionString}-${operatingSystem}-x64.zip`
+                ? `flyway-commandline-${urlComponents.versionString}-${operatingSystem}-${cpuArchitecture}.tar.gz`
+                : `flyway-commandline-${urlComponents.versionString}-${operatingSystem}-${cpuArchitecture}.zip`
         }
 
         return `flyway-commandline-${urlComponents.versionString}.tar.gz`;
