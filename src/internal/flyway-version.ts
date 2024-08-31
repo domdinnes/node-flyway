@@ -714,6 +714,10 @@ export const getFlywayCliVersionForHash = (hash: string): FlywayVersion => {
             return FlywayVersion["V9.0.0"];
         }
 
+        case "dded1ea374bc7311a61a725e6597e081": {
+            return FlywayVersion["V9.22.3"];
+        }
+
         default: {
             throw new Error(`Hash: ${hash} not yet added for Flyway version. This means that the Flyway CLI in question cannot be used from the local system.`);
         }
