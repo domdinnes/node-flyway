@@ -137,7 +137,8 @@ export enum FlywayVersion {
     "V8.5.7",
     "V8.5.8",
     "V8.5.9",
-    "V9.0.0"
+    "V9.0.0",
+    "V9.22.3"
 }
 
 
@@ -711,6 +712,10 @@ export const getFlywayCliVersionForHash = (hash: string): FlywayVersion => {
 
         case "4dad1d6f28b9b6711d7987fbfbb538b8": {
             return FlywayVersion["V9.0.0"];
+        }
+
+        case "dded1ea374bc7311a61a725e6597e081": {
+            return FlywayVersion["V9.22.3"];
         }
 
         default: {
