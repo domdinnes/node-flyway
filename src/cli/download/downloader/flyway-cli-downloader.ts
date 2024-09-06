@@ -65,6 +65,7 @@ export class FlywayCliUrlBuilder {
     ): {url: string, fileName: string} {
         const urlComponents = getUrlComponentsForFlywayVersion(flywayVersion);
         const fileName = this.buildFilename(flywayVersion, operatingSystem, cpuArchitecture);
+        
         return {
             url: `https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${urlComponents.versionString}/${fileName}`,
             fileName
