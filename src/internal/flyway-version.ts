@@ -138,7 +138,106 @@ export enum FlywayVersion {
     "V8.5.8",
     "V8.5.9",
     "V9.0.0",
-    "V9.22.3"
+    "V9.0.1",
+    "V9.0.2",
+    "V9.0.3",
+    "V9.0.4",
+    "V9.1.0",
+    "V9.1.1",
+    "V9.1.2",
+    "V9.1.3",
+    "V9.1.4",
+    "V9.1.5",
+    "V9.1.6",
+    "V9.10.0",
+    "V9.10.1",
+    "V9.10.2",
+    "V9.11.0",
+    "V9.12.0",
+    "V9.13.0",
+    "V9.14.0",
+    "V9.14.1",
+    "V9.15.0",
+    "V9.15.1",
+    "V9.15.2",
+    "V9.16.0",
+    "V9.16.1",
+    "V9.16.2",
+    "V9.16.3",
+    "V9.17.0",
+    "V9.18.0",
+    "V9.19.0",
+    "V9.19.1",
+    "V9.19.2",
+    "V9.19.3",
+    "V9.19.4",
+    "V9.2.0",
+    "V9.2.1",
+    "V9.2.2",
+    "V9.2.3",
+    "V9.20.0",
+    "V9.20.1",
+    "V9.21.0",
+    "V9.21.1",
+    "V9.21.2",
+    "V9.22.0",
+    "V9.22.1",
+    "V9.22.2",
+    "V9.22.3",
+    "V9.3.0",
+    "V9.3.1",
+    "V9.4.0",
+    "V9.5.0",
+    "V9.5.1",
+    "V9.6.0",
+    "V9.7.0",
+    "V9.8.0",
+    "V9.8.1",
+    "V9.8.2",
+    "V9.8.3",
+    "V9.9.0",
+    "V10.0.0",
+    "V10.0.1",
+    "V10.1.0",
+    "V10.10.0",
+    "V10.11.0",
+    "V10.11.1",
+    "V10.12.0",
+    "V10.13.0",
+    "V10.14.0",
+    "V10.15.0",
+    "V10.15.2",
+    "V10.16.0",
+    "V10.17.0",
+    "V10.17.1",
+    "V10.17.2",
+    "V10.17.3",
+    "V10.18.0",
+    "V10.18.1",
+    "V10.18.2",
+    "V10.19.0",
+    "V10.2.0",
+    "V10.20.0",
+    "V10.20.1",
+    "V10.21.0",
+    "V10.22.0",
+    "V10.3.0",
+    "V10.4.0",
+    "V10.4.1",
+    "V10.5.0",
+    "V10.6.0",
+    "V10.7.0",
+    "V10.7.1",
+    "V10.7.2",
+    "V10.8.0",
+    "V10.8.1",
+    "V10.9.0",
+    "V10.9.1",
+    "V11.0.0",
+    "V11.0.1",
+    "V11.1.0",
+    "V11.1.1",
+    "V11.2.0",
 }
 
 
@@ -716,6 +815,402 @@ export const getFlywayCliVersionForHash = (hash: string): FlywayVersion => {
 
         case "dded1ea374bc7311a61a725e6597e081": {
             return FlywayVersion["V9.22.3"];
+        }
+
+        case "941f68cee6e31f447776eea947ab3200": {
+            return FlywayVersion["V10.0.0"];
+        }
+        
+        case "635127499c072d7c0d5b36d66e10405f": {
+            return FlywayVersion["V10.0.1"];
+        }
+        
+        case "1e62a8109f6cb558b585eacfb88124ae": {
+            return FlywayVersion["V10.1.0"];
+        }
+        
+        case "ec60051e0a15483d3b57ba858867e0af": {
+            return FlywayVersion["V10.10.0"];
+        }
+        
+        case "395c3d40fd31c0d448af98c9522f8c48": {
+            return FlywayVersion["V10.11.0"];
+        }
+        
+        case "f8605fcc8cb9b0529c223b573bbecbe0": {
+            return FlywayVersion["V10.11.1"];
+        }
+        
+        case "c0fc4b8c21f98e8d495e9e895967b67d": {
+            return FlywayVersion["V10.12.0"];
+        }
+        
+        case "993a7c3726ddaf97a5a3cee0cf35de94": {
+            return FlywayVersion["V10.13.0"];
+        }
+        
+        case "7869aa2fb5b6eeee39aeff1061dffa37": {
+            return FlywayVersion["V10.14.0"];
+        }
+        
+        case "7ea68107d2160b425150b254b1610d6c": {
+            return FlywayVersion["V10.15.0"];
+        }
+        
+        case "eaae73ed714de57c450c3f58fc2af65f": {
+            return FlywayVersion["V10.15.2"];
+        }
+        
+        case "2fbd48133ff96e35bda877a81c133862": {
+            return FlywayVersion["V10.16.0"];
+        }
+        
+        case "854580d3ef8d0de92b33c6822afefe5e": {
+            return FlywayVersion["V10.17.0"];
+        }
+        
+        case "f2fbecca122732d3a8b57fc644ecc460": {
+            return FlywayVersion["V10.17.1"];
+        }
+        
+        case "f6e95fae27e60d9a0aa63937fda9d8c3": {
+            return FlywayVersion["V10.17.2"];
+        }
+        
+        case "7c60c522d0b47b057af1a469205e9f95": {
+            return FlywayVersion["V10.17.3"];
+        }
+        
+        case "7da2dadb10120d8f6dec8d5e8943037d": {
+            return FlywayVersion["V10.18.0"];
+        }
+        
+        case "184a777288acbaa61801cd8129ae481a": {
+            return FlywayVersion["V10.18.1"];
+        }
+        
+        case "e1652caf8da621050f1943077a42ea57": {
+            return FlywayVersion["V10.18.2"];
+        }
+        
+        case "caa9ac9afd255eb2a7caf03fda7b884f": {
+            return FlywayVersion["V10.19.0"];
+        }
+        
+        case "f26ffcdec62bd8753e8c26e9803335d4": {
+            return FlywayVersion["V10.2.0"];
+        }
+        
+        case "6956e2fd69a03c9965d6f958f1ffb145": {
+            return FlywayVersion["V10.20.0"];
+        }
+        
+        case "8da9b8211107dd7d4d77800d4ec1122c": {
+            return FlywayVersion["V10.20.1"];
+        }
+        
+        case "b01bfeca52f6b52e2ee9451811567fab": {
+            return FlywayVersion["V10.21.0"];
+        }
+        
+        case "3102b95044000c9e912b88fe2da5e397": {
+            return FlywayVersion["V10.22.0"];
+        }
+        
+        case "2eac72942c222df2ea783189c7b6a2b8": {
+            return FlywayVersion["V10.3.0"];
+        }
+        
+        case "dd4629b86713a907500c744ec3a3e785": {
+            return FlywayVersion["V10.4.0"];
+        }
+        
+        case "13f4c7c964f97562517b8e2aa3ac8a07": {
+            return FlywayVersion["V10.4.1"];
+        }
+        
+        case "61d50376ab1c33dfbd712b3fc41f7d42": {
+            return FlywayVersion["V10.5.0"];
+        }
+        
+        case "1c49b31a8485c74614e09788789aee41": {
+            return FlywayVersion["V10.6.0"];
+        }
+        
+        case "26c9fd0e1b29d919ed22449d76cd9ca2": {
+            return FlywayVersion["V10.7.0"];
+        }
+        
+        case "6f0181e97c7bd2bb29c102b5219c09b4": {
+            return FlywayVersion["V10.7.1"];
+        }
+        
+        case "2751b904540a4eeeadf2e2a4168539e7": {
+            return FlywayVersion["V10.7.2"];
+        }
+        
+        case "a3098a2de4c35a8c42527b90037addf1": {
+            return FlywayVersion["V10.8.0"];
+        }
+        
+        case "db15954156f6bcad75598bac1f383105": {
+            return FlywayVersion["V10.8.1"];
+        }
+        
+        case "630858351febaffb106ea2a793fd9299": {
+            return FlywayVersion["V10.9.0"];
+        }
+        
+        case "ac716bc9e6eccd2ba18d7cf2962091f4": {
+            return FlywayVersion["V10.9.1"];
+        }
+        
+        case "83126084ff710c38c961fb92861e42fa": {
+            return FlywayVersion["V11.0.0"];
+        }
+        
+        case "b085a3915db30ade855bc99283d5895b": {
+            return FlywayVersion["V11.0.1"];
+        }
+        
+        case "71f187f35115983f05fba2dc03a8dee9": {
+            return FlywayVersion["V11.1.0"];
+        }
+        
+        case "5e5525e50fc706c52ccd3d30178ae2ba": {
+            return FlywayVersion["V11.1.1"];
+        }
+        
+        case "a9425f4730f0b89a67865df5b7414dd4": {
+            return FlywayVersion["V11.2.0"];
+        }
+        
+        case "9afabe2604ed7abbaa503a0ab0f660cb": {
+            return FlywayVersion["V9.0.1"];
+        }
+        
+        case "57c7e3c90a354990b4dc80128c5d3da5": {
+            return FlywayVersion["V9.0.2"];
+        }
+        
+        case "b301816d044107c75fbd275d3fae3f3e": {
+            return FlywayVersion["V9.0.3"];
+        }
+        
+        case "dee1fcef092f5dcf7892f80c08e7ac30": {
+            return FlywayVersion["V9.0.4"];
+        }
+        
+        case "a4c164540e5bf8d7998c76a927f96861": {
+            return FlywayVersion["V9.1.0"];
+        }
+        
+        case "ad2e4e2294230a1844dc90d391bc274f": {
+            return FlywayVersion["V9.1.1"];
+        }
+        
+        case "129eb3ffde294b6464106afbfa8802ee": {
+            return FlywayVersion["V9.1.2"];
+        }
+        
+        case "3ae2e99094ca83e6dbe2f7c4f039c6ab": {
+            return FlywayVersion["V9.1.3"];
+        }
+        
+        case "7de730bd32ed7beb69626775415cbc2e": {
+            return FlywayVersion["V9.1.4"];
+        }
+        
+        case "d850f7f8992b73fe3edb7f5dbd74e9a2": {
+            return FlywayVersion["V9.1.5"];
+        }
+        
+        case "f24cab687734745df7f56c5c0c4b3a9d": {
+            return FlywayVersion["V9.1.6"];
+        }
+        
+        case "a13f1bef623894d8e29a048e668551e9": {
+            return FlywayVersion["V9.10.0"];
+        }
+        
+        case "128716520d6fa7e6bf4998eda09828f2": {
+            return FlywayVersion["V9.10.1"];
+        }
+        
+        case "2e7c93216162b56da08b9c3aff8d5926": {
+            return FlywayVersion["V9.10.2"];
+        }
+        
+        case "5a0d3014d537e60d05104735b5b8ef7d": {
+            return FlywayVersion["V9.11.0"];
+        }
+        
+        case "97bd5aad50874c1e701bb7227f300ecc": {
+            return FlywayVersion["V9.12.0"];
+        }
+        
+        case "713aae101fee6c6a5decf05458ae2408": {
+            return FlywayVersion["V9.13.0"];
+        }
+        
+        case "4430d136ecfd263964b6104e8ac7cef3": {
+            return FlywayVersion["V9.14.0"];
+        }
+        
+        case "4b1176916eed2c10ff41a0220a2b4925": {
+            return FlywayVersion["V9.14.1"];
+        }
+        
+        case "5463d2c77d73bb1a63e8074ad8094ef1": {
+            return FlywayVersion["V9.15.0"];
+        }
+        
+        case "852a0cbe56b6856b3f53bf19b78a35d4": {
+            return FlywayVersion["V9.15.1"];
+        }
+        
+        case "8e983eb3cbec4b34e6e3d18bc9a0a817": {
+            return FlywayVersion["V9.15.2"];
+        }
+        
+        case "019d3532cce2ff096945c072c5f04e08": {
+            return FlywayVersion["V9.16.0"];
+        }
+        
+        case "19b1052a7b3e5a0971b14bcecdb34a60": {
+            return FlywayVersion["V9.16.1"];
+        }
+        
+        case "c371115d8f27007591253b58f3da9094": {
+            return FlywayVersion["V9.16.2"];
+        }
+        
+        case "0ff7e455591386370c767399c68240fc": {
+            return FlywayVersion["V9.16.3"];
+        }
+        
+        case "bfbcdec190e589f1a7fa5f41c336b6ae": {
+            return FlywayVersion["V9.17.0"];
+        }
+        
+        case "0aa86dab1415e29f1ab6e369ed7336a0": {
+            return FlywayVersion["V9.18.0"];
+        }
+        
+        case "772eb79808ea9132e5febc7695ca75c5": {
+            return FlywayVersion["V9.19.0"];
+        }
+        
+        case "dd69a2bfd26460dee41abddc75a47af6": {
+            return FlywayVersion["V9.19.1"];
+        }
+        
+        case "7e9baea60d60dc326d4b62d0d09be792": {
+            return FlywayVersion["V9.19.2"];
+        }
+        
+        case "9e1d7219fe122cdf3ec370868880f908": {
+            return FlywayVersion["V9.19.3"];
+        }
+        
+        case "fea2063d2746b9c99f96af76b66fd772": {
+            return FlywayVersion["V9.19.4"];
+        }
+        
+        case "6346a0d538a2df0cade796dae91c0a40": {
+            return FlywayVersion["V9.2.0"];
+        }
+        
+        case "f8b09cf048e81cdc6d6b073e2fdf1c9f": {
+            return FlywayVersion["V9.2.1"];
+        }
+        
+        case "942080cf352da80005b300bfc13abf59": {
+            return FlywayVersion["V9.2.2"];
+        }
+        
+        case "4b9a6f5724388b7ab34b743d3c71ee6c": {
+            return FlywayVersion["V9.2.3"];
+        }
+        
+        case "f2b9a7250f54c1b8ceb809df8fe7d10e": {
+            return FlywayVersion["V9.20.0"];
+        }
+        
+        case "1fcf373d56b1a304fb52ca721d1b7f86": {
+            return FlywayVersion["V9.20.1"];
+        }
+        
+        case "8e55721b613fe77fdb0189fdb0127cb5": {
+            return FlywayVersion["V9.21.0"];
+        }
+        
+        case "d83f2207ce7a197f007f3a221a18274e": {
+            return FlywayVersion["V9.21.1"];
+        }
+        
+        case "13d7e95875be186d519585123824ee07": {
+            return FlywayVersion["V9.21.2"];
+        }
+        
+        case "7e743ec27f151ff12533636581a01567": {
+            return FlywayVersion["V9.22.0"];
+        }
+        
+        case "8a6206599cbf6f711772954c92efd8bf": {
+            return FlywayVersion["V9.22.1"];
+        }
+        
+        case "7fd410bbf8120e3a1f5677687bab4a63": {
+            return FlywayVersion["V9.22.2"];
+        }
+        
+        case "015e6cc7628e0df1419a4bfe7173bf7d": {
+            return FlywayVersion["V9.3.0"];
+        }
+        
+        case "c64e27a9e79d5213e2aed73e490ffbcc": {
+            return FlywayVersion["V9.3.1"];
+        }
+        
+        case "8e093c33f3e3c1986e2620af49016807": {
+            return FlywayVersion["V9.4.0"];
+        }
+        
+        case "38d1eef2de7611cd041ffc40f7a269f7": {
+            return FlywayVersion["V9.5.0"];
+        }
+        
+        case "cf6ff66d6a616ec0bce5c8b0b0264f96": {
+            return FlywayVersion["V9.5.1"];
+        }
+        
+        case "26dbe4b4b8534162331c2752f629f043": {
+            return FlywayVersion["V9.6.0"];
+        }
+        
+        case "43d25f6dbcfa8c59fedcfbf33458d74d": {
+            return FlywayVersion["V9.7.0"];
+        }
+        
+        case "c0517dc9c8bb866f8abf11d0b153af92": {
+            return FlywayVersion["V9.8.0"];
+        }
+        
+        case "ff78166ec8325340b77cb47cf441b715": {
+            return FlywayVersion["V9.8.1"];
+        }
+        
+        case "a8239c76234abcb3681063e2abc44f7b": {
+            return FlywayVersion["V9.8.2"];
+        }
+        
+        case "c1fe7bb10cae86f3df33842be6af4e6e": {
+            return FlywayVersion["V9.8.3"];
+        }
+        
+        case "26bb15b72f38a057e162dbb125d68a32": {
+            return FlywayVersion["V9.9.0"];
         }
 
         default: {
