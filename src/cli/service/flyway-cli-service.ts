@@ -1,14 +1,14 @@
 import { readFile } from "fs/promises";
-import path, { join } from "path";
+import { join } from "path";
 import { FlywayVersion, getFlywayCliVersionForHash } from "../../internal/flyway-version";
 import {
     existsAndIsDirectory,
     findAllExecutableFilesInDirectory,
-    getHostOperatingSystem,
-    globPromise
+    getHostOperatingSystem
 } from "../../utility/utility";
 import md5 = require("md5");
 import { FlywayExecutable } from "../flyway-cli";
+import { glob } from "glob";
 
 
 export class FlywayCliService {
@@ -103,8 +103,8 @@ export class FlywayCliService {
      */
     private static async getFlywayCommandLineFiles(directory: string) {
         const mappedDirectory = getHostOperatingSystem() == 'windows' ? directory.replaceAll('\\', '/') : directory;
-        const paths_a = await globPromise(`${mappedDirectory}/lib/community/flyway-commandline-*.jar`);
-        const paths_b = await globPromise(`${mappedDirectory}/lib/flyway-commandline-*.jar`);
+        const paths_a = await glob(`${mappedDirectory}/lib/community/flyway-commandline-*.jar`);
+        const paths_b = await glob(`${mappedDirectory}/lib/flyway-commandline-*.jar`);
 
         return paths_a.concat(paths_b);
     }
