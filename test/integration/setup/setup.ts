@@ -1,7 +1,7 @@
-import {exec as execute} from "shelljs";
 import {getLogger} from "../../../src/utility/logger";
 import {Flyway} from "../../../src";
 import {getDatabaseConnection, testConfiguration} from "../utility/utility";
+import {execute} from "../../../src/utility/utility";
 
 export const logger = getLogger("DatabaseSetup", "integration-test");
 
@@ -36,7 +36,6 @@ export const cleanDatabase = async () => {
 
 
 
-
 export const createContainerizedDatabase = async (password: string, port: number) => {
 
     // Kills a running postgres container if one exists
@@ -51,16 +50,7 @@ export const createContainerizedDatabase = async (password: string, port: number
 
 
     try {
-      await new Promise<void>((resolve, reject) => {
-         execute(createContainerizedPostgresCommand, {silent: true}, (code, stdout) => {
-             if (code == 0) {
-                 resolve();
-             }
-             else {
-                 reject();
-             }
-         });
-     });
+      await execute(createContainerizedPostgresCommand, {})
         logger.log("Successfully created clean database.")
     }
     catch(err: any) {
