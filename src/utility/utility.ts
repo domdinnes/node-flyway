@@ -1,6 +1,10 @@
 import { constants as FS_CONSTANTS } from "fs";
 import { access, readdir, stat } from "fs/promises";
 import { join } from "path";
+import {exec, ExecOptions} from "node:child_process";
+import {FlywayRawExecutionResponse} from "../response/responses";
+import {FlywayExecutable} from "../cli/flyway-cli";
+import {getLogger} from "./logger";
 
 export type OperatingSystem = "macosx" | "linux" | "windows";
 export type CpuArchitecture = "arm" | "arm64" | "ia32" | "mips" | "mipsel" | "ppc" | "ppc64" | "s390" | "s390x" | "x64";
@@ -70,3 +74,33 @@ export const existsAndIsDirectory = async (directory: string) => {
 
     return stats.isDirectory();
 }
+
+export type ExecutionResponse = {
+    success: boolean,
+    response: string
+}
+
+
+export const execute = async (command: string, options: ExecOptions): Promise<ExecutionResponse> => {
+    return new Promise((resolve, reject) => {
+        try {
+            exec(
+                command,
+                options,
+                (err, stdout, stderr) => {
+                    if (err == null) {
+                        resolve(
+                            {success: true, response: stdout.toString()}
+                        );
+                    } else {
+                        resolve({success: false, response: stderr.toString()});
+                    }
+                }
+            )
+        } catch (error) {
+            getLogger("Utility").log(`Error executing command ${command}. Error: ${error}`);
+            resolve({success: false, response: ""});
+        }
+    });
+}
+

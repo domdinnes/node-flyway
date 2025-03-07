@@ -1,9 +1,9 @@
-import {exec as execute} from "shelljs";
 import {FlywayCliSource, FlywayCommand, FlywayConfig} from "../types/types";
 import {FlywayVersion} from "../internal/flyway-version";
 import {FlywayCommandLineOptions} from "../internal/flyway-command-line-options";
 import {getLogger} from "../utility/logger";
 import {FlywayRawExecutionResponse} from "../response/responses";
+import {execute} from "../utility/utility";
 
 export class FlywayCli {
 
@@ -36,27 +36,17 @@ export class FlywayExecutable {
 
         FlywayExecutable.logger.log(`Executing flyway command: ${command}`);
 
-        const response = await new Promise<FlywayRawExecutionResponse>((resolve, reject) => {
-            execute(command, {silent: true}, (code, stdout) => {
-                if (code == 0) {
-                    resolve({success: true, response: stdout});
-                }
-                if (code == 2 && !stdout) {
-                    // Handle non-zero code and empty output to stdout. Output to stdout appears to be "" when the error code is 2.
-                    reject();
-                }
-                else {
-                    FlywayExecutable.logger.log(`Code: ${code} returned when executing command.`);
-                    resolve({success: false, response: stdout}); // Nothing is piped to stderr by the CLI. Maybe in some cases it is?
-                }
-            });
-        });
+        const response: FlywayRawExecutionResponse = await execute(command, {});
 
-        FlywayExecutable.logger.log(`Successfully executed command`);
-        FlywayExecutable.logger.log(`Received response from Flyway CLI: ${response.response}`);
+        if(response.success) {
+            FlywayExecutable.logger.log(`Successfully executed command`);
+            FlywayExecutable.logger.log(`Received response from Flyway CLI: ${response.response}`);
+        }
+        else {
+            FlywayExecutable.logger.log(`Error returned when executing command: ${command}`);
+        }
 
         return response;
-
 
     }
 }
