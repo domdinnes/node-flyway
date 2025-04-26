@@ -1,8 +1,13 @@
-import { join } from "path";
-import { FlywayVersion, getUrlComponentsForFlywayVersion } from "../../../internal/flyway-version";
+import {join} from "path";
+import {FlywayVersion, getUrlComponentsForFlywayVersion} from "../../../internal/flyway-version";
 import {DownloaderHelper} from "node-downloader-helper";
 import {getLogger, Logger} from "../../../utility/logger";
-import {getHostOperatingSystem, OperatingSystem, getHostCpuArchitecture, CpuArchitecture} from "../../../utility/utility";
+import {
+    CpuArchitecture,
+    getHostCpuArchitecture,
+    getHostOperatingSystem,
+    OperatingSystem
+} from "../../../utility/utility";
 
 /*
     Takes a flyway version and a save directory.
@@ -11,6 +16,11 @@ import {getHostOperatingSystem, OperatingSystem, getHostCpuArchitecture, CpuArch
 */
 
 export interface FlywayCliDownloader {
+
+    getFlywayCliDownloadLocation(
+        flywayVersion: FlywayVersion,
+        saveDirectory: string
+    ): string
 
     downloadFlywayCli(
         flywayVersion: FlywayVersion, 
@@ -28,11 +38,20 @@ export class DirectFlywayCliDownloader implements FlywayCliDownloader {
         flywayVersion: FlywayVersion,
         saveDirectory: string
     ): Promise<string> {
-        const operatingSystem = getHostOperatingSystem();
-        const cpuArchitecture = getHostCpuArchitecture();
-        const url = FlywayCliUrlBuilder.buildUrl(flywayVersion, operatingSystem, cpuArchitecture);
+        const url = this.buildUrl(flywayVersion);
         await this.download(url.url, saveDirectory);
         return join(saveDirectory, url.fileName);
+    }
+
+    getFlywayCliDownloadLocation(flywayVersion: FlywayVersion, saveDirectory: string): string {
+        const url = this.buildUrl(flywayVersion);
+        return join(saveDirectory, url.fileName);
+    }
+
+    private buildUrl(flywayVersion: FlywayVersion): FlywayCliUrl {
+        const operatingSystem = getHostOperatingSystem();
+        const cpuArchitecture = getHostCpuArchitecture();
+        return FlywayCliUrlBuilder.buildUrl(flywayVersion, operatingSystem, cpuArchitecture);
     }
 
     private async download(url: string, saveDirectory: string): Promise<void> {
@@ -53,16 +72,17 @@ export class DirectFlywayCliDownloader implements FlywayCliDownloader {
 
 }
 
-
+export type FlywayCliUrl = {
+    url: string, fileName: string
+};
 
 export class FlywayCliUrlBuilder {
-
 
     public static buildUrl(
         flywayVersion: FlywayVersion,
         operatingSystem: OperatingSystem,
         cpuArchitecture: CpuArchitecture
-    ): {url: string, fileName: string} {
+    ): FlywayCliUrl  {
         const urlComponents = getUrlComponentsForFlywayVersion(flywayVersion);
         const fileName = this.buildFilename(flywayVersion, operatingSystem, cpuArchitecture);
         
@@ -100,5 +120,11 @@ export class MavenFlywayCliDownloader implements FlywayCliDownloader {
     ): Promise<string> {
         throw new Error("Method not implemented.");
     }
+
+    getFlywayCliDownloadLocation(flywayVersion: FlywayVersion, saveDirectory: string): string {
+        throw new Error("Method not implemented.");
+    }
+
+
 
 }
