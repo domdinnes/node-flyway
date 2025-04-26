@@ -1,9 +1,10 @@
 import {describe, it} from 'mocha';
-import {cleanDatabase} from "./setup/setup";
+import {cleanDatabase, logger} from "./setup/setup";
 import {Flyway, FlywayCliStrategy} from "../../src";
 import {expect} from "chai";
 import {
-    basicMigrations, disconnectDatabase,
+    basicMigrations,
+    disconnectDatabase,
     failingMigrations,
     getDatabaseConnection,
     missingMigrations,
@@ -11,7 +12,10 @@ import {
     outOfOrderMigrations,
     testConfiguration
 } from "./utility/utility";
-
+import {DEFAULT_FLYWAY_VERSION} from "../../src/internal/defaults";
+import {DirectFlywayCliDownloader} from "../../src/cli/download/downloader/flyway-cli-downloader";
+import _temp from "temp";
+import {enableLogging} from "../../src/utility/logger";
 
 describe("migrate()", () => {
 
@@ -306,6 +310,49 @@ describe("migrate()", () => {
         expect(results.rowCount).to.equal(1);
     });
 
+    /*
+        This test verifies a fix against the following bug:
+
+        Partially completed/duplicate downloads which haven't been cleaned up will cause an error to occur.
+        This will happen when one or more download attempts are interrupted, leaving incomplete files in the download directory.
+        The first download attempt will leave a file with name `flyway-cli-9.0.0.tar.gz`, the second `flyway-cli-9.0.0.tar.gz (1)` and so on.
+        When the next complete download happens, the process will fail at the extract stage as the extraction url will reference an incorrect url.
+        The url of the completed download will be: `flyway-cli-9.0.0.tar.gz (2)` whereas the extraction url will reference flyway-cli-9.0.0.tar.gz which refers to the first incomplete download.
+    */
+    it('can download a Flyway CLI and perform a basic migration when incomplete download exists in CLI', async () => {
+
+        // Given
+        // ... a previously downloaded version that hasn't been cleaned up
+        const defaultVersion = DEFAULT_FLYWAY_VERSION;
+
+        enableLogging("default");
+
+        const flywayDownloader = new DirectFlywayCliDownloader();
+
+        const temp = _temp.track();
+
+        await flywayDownloader.downloadFlywayCli(
+            defaultVersion, temp.dir
+        )
+
+        // When
+        // ... an attempt is made to download and migrate a flyway cli
+        const flyway = new Flyway(
+            {
+                ...testConfiguration,
+                migrationLocations: [basicMigrations]
+            },
+            {
+                flywayCliStrategy: FlywayCliStrategy.DOWNLOAD_CLI_ONLY
+            }
+        );
+
+        // Then
+        // ... the migration attempt is successful
+        const response = await flyway.migrate();
+
+        expect(response.success).to.be.true;
+    });
 
 
 });

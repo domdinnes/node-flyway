@@ -57,15 +57,14 @@ export class DownloadProvider extends FlywayCliProvider {
 
         DownloadProvider.logger.log(`Downloading Flyway CLI ${FlywayVersion[flywayVersion]}...`)
 
+        const archiveLocation = this.flywayCliDownloader.getFlywayCliDownloadLocation(flywayVersion, this.saveDirectory);
+
         /*
-            Partially completed/duplicate downloads which haven't been cleaned up will cause an error to occur.
-            This will happen when one or more download attempts are interrupted, leaving incomplete files in the download directory.
-            The first download attempt will leave a file with name `flyway-cli-9.0.0.tar.gz`, the second `flyway-cli-9.0.0.tar.gz (1)` and so on.
-            When the next complete download happens, the process will fail at the extract stage as the extraction url will reference an incorrect url.
-            The url of the completed download will be: `flyway-cli-9.0.0.tar.gz (2)` whereas the extraction url will reference flyway-cli-9.0.0.tar.gz which refers to the first incomplete download.
-            This is a bug and requires a fix.
-        */
-        const archiveLocation = await this.flywayCliDownloader.downloadFlywayCli(
+            Clean out any partially downloaded files
+         */
+        await this.removeArchiveFile(archiveLocation);
+
+        await this.flywayCliDownloader.downloadFlywayCli(
             flywayVersion,
             this.saveDirectory
         );
@@ -80,8 +79,7 @@ export class DownloadProvider extends FlywayCliProvider {
 
         DownloadProvider.logger.log(`Successfully extracted Flyway CLI ${FlywayVersion[flywayVersion]} to location: ${extractedDirectory}`)
 
-
-        await rm(archiveLocation, {force: true});
+        await this.removeArchiveFile(archiveLocation);
         
         const executable = await FlywayCliService.getExecutableFromFlywayCliDirectory(extractedDirectory);
 
@@ -135,6 +133,18 @@ export class DownloadProvider extends FlywayCliProvider {
             Referenced here: https://github.com/kevva/decompress/issues/93
             Not an issue, only impacts 'man'. The symlinks can be excluded using a filter.
         */
+    }
+
+    private async removeArchiveFile(archiveLocation: string) {
+        try {
+            await rm(archiveLocation, {force: true});
+        }
+        catch (err: any) {
+            if(err.code === "ENOENT") {
+                // When attempting an early clean of the archive it is possible that it doesn't exist. In this case, do nothing.
+            }
+        }
+
     }
 }
 
