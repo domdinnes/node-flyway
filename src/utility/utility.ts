@@ -93,7 +93,8 @@ export const execute = async (command: string, options: ExecOptions): Promise<Ex
                             {success: true, response: stdout.toString()}
                         );
                     } else {
-                        resolve({success: false, response: stderr.toString()});
+                        // Flyway writes its JSON error to stdout, even when exiting with a non-zero code
+                        resolve({success: false, response: stdout.toString() || stderr.toString()});
                     }
                 }
             )
